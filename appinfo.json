@@ -1,0 +1,18 @@
+{
+  "uuid": "a62f6801-64e0-4ecc-8e7c-fa4f1b17d10e",
+  "shortName": "pomodoro",
+  "longName": "pomodoro",
+  "companyName": "MakeAwesomeHappen",
+  "versionLabel": "1.0",
+  "sdkVersion": "3",
+  "targetPlatforms": ["aplite", "basalt", "chalk"],
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": []
+  }
+}
