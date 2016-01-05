@@ -1,0 +1,41 @@
+machine:
+  python:
+    version: 2.7.10
+  environment:
+    PATH: "${HOME}/pebble-sdk/bin:${PATH}"
+    PEBBLESDK_URL: "https://s3.amazonaws.com/assets.getpebble.com/pebble-tool/pebble-sdk-4.0-linux64.tar.bz2"
+    PEBBLESDK_SHA256SUM: "d199fb18065e7b70a5c92d1a5ccb5d09e1fecc57aabc624be7a6b1717b477fd9"
+    PEBBLESDK_VERSION: "3.8.2"
+
+dependencies:
+  cache_directories:
+    - "~/bin"
+    - "~/pebble-sdk"
+  pre:
+    - sudo apt-get install libsdl1.2debian libfdt1 libpixman-1-0
+    - |
+      if [ ! -d "${HOME}/pebble-sdk" ]; then
+        curl -Lo pebble-sdk.tar.bz2 "${PEBBLESDK_URL}" || exit $?
+        sha256sum pebble-sdk.tar.bz2
+        echo "${PEBBLESDK_SHA256SUM}  pebble-sdk.tar.bz2" | sha256sum -c || exit $?
+        mkdir -p /tmp/pebble-sdk || exit $?
+        tar xf pebble-sdk.tar.bz2 -C /tmp/pebble-sdk --strip-components 1
+        mv /tmp/pebble-sdk "${HOME}"
+      fi
+    - (cd "${HOME}/pebble-sdk"; virtualenv --no-site-packages .env)
+    - ~/pebble-sdk/.env/bin/pip install -r ~/pebble-sdk/requirements.txt
+    - yes | pebble sdk install "${PEBBLESDK_VERSION}"
+    - pip install awscli
+  override:
+    - pip freeze
+    - pebble --version
+
+test:
+  override:
+    - pebble build
+
+deployment:
+  release:
+    tag: /[0-9]+\.[0-9]+\.[0-9]+/
+    commands:
+      - hub release create -a "build/${CIRCLE_PROJECT_REPONAME}.pbw" -m "Release ${CIRCLE_TAG}" "${CIRCLE_TAG}"
