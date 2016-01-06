@@ -35,7 +35,7 @@ static void stop_work() {
 
 static void pause_work() {
   s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
-	time_t wakeup_timestamp = 0;
+  time_t wakeup_timestamp = 0;
   if (wakeup_query(s_wakeup_id, &wakeup_timestamp)) {
     int remaining = wakeup_timestamp - time(NULL);
     persist_write_int(PERSIST_REMAINING, remaining);
@@ -168,9 +168,9 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   if (s_wakeup_id == 0) {
     s_wakeup_id = (int) persist_read_int(PERSIST_WAKEUP_ID);
   }
-	time_t wakeup_timestamp = 0;
-	if (wakeup_query(s_wakeup_id, &wakeup_timestamp)) {
-		int remaining = wakeup_timestamp - time(NULL);
+  time_t wakeup_timestamp = 0;
+  if (wakeup_query(s_wakeup_id, &wakeup_timestamp)) {
+    int remaining = wakeup_timestamp - time(NULL);
     int minutes = remaining / 60;
     int seconds = remaining % 60;
     snprintf(s_buffer, sizeof(s_buffer), "%02d:%02d", minutes, seconds);
@@ -180,8 +180,8 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 
 static void update_display(Layer *layer, GContext *ctx) {
   int remaining;
-	time_t wakeup_timestamp = 0;
-	if (wakeup_query(s_wakeup_id, &wakeup_timestamp)) {
+  time_t wakeup_timestamp = 0;
+  if (wakeup_query(s_wakeup_id, &wakeup_timestamp)) {
     remaining = wakeup_timestamp - time(NULL);
   }
   else {
@@ -254,23 +254,23 @@ static void window_load(Window *window) {
       action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, NULL);
       break;
   }
-	wakeup_service_subscribe(wakeup_handler);
-	if (launch_reason() == APP_LAUNCH_WAKEUP) {
-		// The app was started by a wakeup
-		WakeupId id = 0;
-		int32_t reason = 0;
+  wakeup_service_subscribe(wakeup_handler);
+  if (launch_reason() == APP_LAUNCH_WAKEUP) {
+    // The app was started by a wakeup
+    WakeupId id = 0;
+    int32_t reason = 0;
 
-		// Get details and handle the wakeup
-		wakeup_get_launch_event(&id, &reason);
-		wakeup_handler(id, reason);
-	}
-	else {
-		s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
-	}
+    // Get details and handle the wakeup
+    wakeup_get_launch_event(&id, &reason);
+    wakeup_handler(id, reason);
+  }
+  else {
+    s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
+  }
 }
 
 static void window_unload(Window *window) {
-	action_bar_layer_destroy(s_actionbar);
+  action_bar_layer_destroy(s_actionbar);
   text_layer_destroy(s_time_layer);
   layer_destroy(s_layer);
 }
