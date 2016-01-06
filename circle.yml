@@ -25,10 +25,11 @@ dependencies:
     - (cd "${HOME}/pebble-sdk"; virtualenv --no-site-packages .env)
     - ~/pebble-sdk/.env/bin/pip install -r ~/pebble-sdk/requirements.txt
     - yes | pebble sdk install "${PEBBLESDK_VERSION}"
-    - pip install awscli
+    - go get github.com/github/hub
   override:
     - pip freeze
     - pebble --version
+    - hub version
 
 test:
   override:
