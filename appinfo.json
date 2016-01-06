@@ -1,8 +1,8 @@
 {
   "uuid": "a62f6801-64e0-4ecc-8e7c-fa4f1b17d10e",
   "shortName": "pomodoro",
-  "longName": "pomodoro",
-  "companyName": "MakeAwesomeHappen",
+  "longName": "pomodoro timer",
+  "companyName": "Akihiro Uchida",
   "versionLabel": "1.0",
   "sdkVersion": "3",
   "targetPlatforms": ["chalk"],
