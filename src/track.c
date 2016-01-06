@@ -140,7 +140,7 @@ static void wakeup_handler(WakeupId id, int32_t reason) {
       start_break();
       break;
     case PAUSING:
-      break; // NEVER
+      break;
     case BREAKING:
       stop_break();
       vibes_long_pulse();
@@ -256,11 +256,8 @@ static void window_load(Window *window) {
   }
   wakeup_service_subscribe(wakeup_handler);
   if (launch_reason() == APP_LAUNCH_WAKEUP) {
-    // The app was started by a wakeup
     WakeupId id = 0;
     int32_t reason = 0;
-
-    // Get details and handle the wakeup
     wakeup_get_launch_event(&id, &reason);
     wakeup_handler(id, reason);
   }
