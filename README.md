@@ -11,7 +11,7 @@ to notify work 25 minutes and take 5 minutes break.
 
 About pomodoro, see [Pomodoro Techinique](http://pomodorotechnique.com/).
 
-screenshots for work/break timer in Pebble, Pebble Time Steel, Pebble Time Round are following.
+screenshots for work/break timer in Aplite, Basalt, Chalk are following.
 
 ![work timer for aplite](screenshots/aplite-screenshot1.png)
 ![work timer for basalt](screenshots/basalt-screenshot1.png)
