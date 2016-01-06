@@ -9,7 +9,7 @@
 This is a simple pomodoro timer for Pebble,
 to notify after 25 minutes work and take 5 minutes break.
 
-About pomodoro, see [Pomodoro Techinique](http://pomodorotechnique.com/).
+About Pomodoro, see [The Pomodoro Technique](http://pomodorotechnique.com/).
 
 screenshots for work/break timer in Aplite, Basalt, Chalk are following.
 
