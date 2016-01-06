@@ -5,7 +5,7 @@
   "companyName": "MakeAwesomeHappen",
   "versionLabel": "1.0",
   "sdkVersion": "3",
-  "targetPlatforms": ["aplite", "basalt", "chalk"],
+  "targetPlatforms": ["chalk"],
   "watchapp": {
     "watchface": false
   },
@@ -13,6 +13,22 @@
     "dummy": 0
   },
   "resources": {
-    "media": []
+    "media": [
+      {
+        "type": "bitmap",
+        "name": "IMAGE_ACTION_ICON_START",
+        "file": "action_icon_start.png"
+      },
+      {
+        "type": "bitmap",
+        "name": "IMAGE_ACTION_ICON_STOP",
+        "file": "action_icon_stop.png"
+      },
+      {
+        "type": "bitmap",
+        "name": "IMAGE_ACTION_ICON_PAUSE",
+        "file": "action_icon_pause.png"
+      }
+    ]
   }
 }
