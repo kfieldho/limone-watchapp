@@ -227,7 +227,11 @@ static void window_load(Window *window) {
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_start);
   action_bar_layer_set_click_config_provider(s_actionbar, config_provider);
 
+#if defined(PBL_RECT)
+  s_time_layer = text_layer_create(GRect(39, 67, 66, 30));
+#elif defined(PBL_ROUND)
   s_time_layer = text_layer_create(GRect(55, 72, 70, 30));
+#endif
   text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
   text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_background_color(s_time_layer, GColorClear);

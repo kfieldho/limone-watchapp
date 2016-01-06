@@ -6,11 +6,11 @@
 
 ## Description
 
-This is a simple pomodoro timer for Pebble Time Round.
+This is a simple pomodoro timer Pebble.
       
 ## Installation
 
-This is a 3rd party pebble app, install at your own risk.
+This is a 3rd party pebble watchapp, install at your own risk.
 Latest release of this app is availavle from [Release page](https://github.com/uchida/pebble-pomodoro/releases).
 
 ## License
