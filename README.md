@@ -7,7 +7,7 @@
 ## Description
 
 This is a simple pomodoro timer for Pebble,
-to notify work 25 minutes and take 5 minutes break.
+to notify after 25 minutes work and take 5 minutes break.
 
 About pomodoro, see [Pomodoro Techinique](http://pomodorotechnique.com/).
 
