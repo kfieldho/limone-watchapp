@@ -8,7 +8,7 @@
 
 This is a simple pomodoro timer for Pebble Time Round.
       
-## Release
+## Installation
 
 This is a 3rd party pebble app, install at your own risk.
 Latest release of this app is availavle from [Release page](https://github.com/uchida/pebble-pomodoro/releases).
