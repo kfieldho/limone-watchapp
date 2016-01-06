@@ -166,7 +166,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
       break;
   }
   if (s_wakeup_id == 0) {
-    s_wakeup_id = (int) persist_read_int(PERSIST_WAKEUP_ID);
+    s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
   }
   time_t wakeup_timestamp = 0;
   if (wakeup_query(s_wakeup_id, &wakeup_timestamp)) {
