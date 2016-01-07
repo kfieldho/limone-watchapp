@@ -214,7 +214,6 @@ static void window_load(Window *window) {
 
   s_layer = layer_create(bounds);
   layer_add_child(window_layer, s_layer);
-  layer_set_update_proc(s_layer, update_display);
 
   s_statusbar = status_bar_layer_create();
   status_bar_layer_set_colors(s_statusbar, GColorClear, GColorBlack);
@@ -232,7 +231,6 @@ static void window_load(Window *window) {
   text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_background_color(s_time_layer, GColorClear);
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
-  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
 
   s_state = persist_read_int(PERSIST_STATE);
   int remaining, minutes, seconds;
@@ -264,6 +262,9 @@ static void window_load(Window *window) {
   else {
     s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
   }
+
+  layer_set_update_proc(s_layer, update_display);
+  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
 }
 
 static void window_unload(Window *window) {
