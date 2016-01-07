@@ -3,7 +3,7 @@
   "shortName": "pomodoro",
   "longName": "Pomodoro Timer",
   "companyName": "Akihiro Uchida",
-  "versionLabel": "1.0",
+  "versionLabel": "0.1",
   "sdkVersion": "3",
   "targetPlatforms": ["aplite", "basalt", "chalk"],
   "watchapp": {

@@ -37,6 +37,6 @@ test:
 
 deployment:
   release:
-    tag: /[0-9]+\.[0-9]+\.[0-9]+/
+    tag: /[0-9]+\.[0-9]+/
     commands:
       - hub release create -a "build/${CIRCLE_PROJECT_REPONAME}.pbw" -m "Release ${CIRCLE_TAG}" "${CIRCLE_TAG}"
