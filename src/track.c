@@ -192,14 +192,14 @@ static void update_display(Layer *layer, GContext *ctx) {
     case NOTHING:
       return;
     case PAUSING:
-      color = GColorChromeYellow;
+      color = PBL_IF_COLOR_ELSE(GColorChromeYellow, GColorLightGray);
       remaining = persist_read_int(PERSIST_REMAINING);
       break;
     case WORKING:
-      color = GColorChromeYellow;
+      color = PBL_IF_COLOR_ELSE(GColorChromeYellow, GColorLightGray);
       break;
     case BREAKING:
-      color = GColorPictonBlue;
+      color = PBL_IF_COLOR_ELSE(GColorPictonBlue, GColorLightGray);
       break;
   }
   int angle = TRIG_MAX_ANGLE - remaining * (TRIG_MAX_ANGLE / ((s_state == BREAKING)? 300: 1500));
