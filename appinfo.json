@@ -17,17 +17,17 @@
       {
         "type": "bitmap",
         "name": "IMAGE_ACTION_ICON_START",
-        "file": "action_icon_start.png"
+        "file": "images/action_icon_start.png"
       },
       {
         "type": "bitmap",
         "name": "IMAGE_ACTION_ICON_STOP",
-        "file": "action_icon_stop.png"
+        "file": "images/action_icon_stop.png"
       },
       {
         "type": "bitmap",
         "name": "IMAGE_ACTION_ICON_PAUSE",
-        "file": "action_icon_pause.png"
+        "file": "images/action_icon_pause.png"
       }
     ]
   }
