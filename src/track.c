@@ -153,7 +153,7 @@ static void config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_DOWN, downclick_handler);
 }
 
-static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
+static void update_timer() {
   switch(s_state) {
     case NOTHING:
       text_layer_set_text(s_time_layer, "25:00");
@@ -176,6 +176,10 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
     snprintf(s_buffer, sizeof(s_buffer), "%02d:%02d", minutes, seconds);
     text_layer_set_text(s_time_layer, s_buffer);
   }
+}
+
+static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
+  update_timer();
 }
 
 static void update_display(Layer *layer, GContext *ctx) {
@@ -268,6 +272,7 @@ static void window_appear(Window *window) {
   else {
     s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
   }
+  update_timer();
 }
 
 static void window_unload(Window *window) {
