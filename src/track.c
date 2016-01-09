@@ -12,6 +12,31 @@ static char s_buffer[32];
 static State s_state;
 static WakeupId s_wakeup_id;
 
+static void update_timer() {
+  switch(s_state) {
+    case NOTHING:
+      text_layer_set_text(s_time_layer, "25:00");
+      return;
+    case PAUSING:
+      break;
+    case WORKING:
+      break;
+    case BREAKING:
+      break;
+  }
+  if (s_wakeup_id == 0) {
+    s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
+  }
+  time_t wakeup_timestamp = 0;
+  if (wakeup_query(s_wakeup_id, &wakeup_timestamp)) {
+    int remaining = wakeup_timestamp - time(NULL);
+    int minutes = remaining / 60;
+    int seconds = remaining % 60;
+    snprintf(s_buffer, sizeof(s_buffer), "%02d:%02d", minutes, seconds);
+    text_layer_set_text(s_time_layer, s_buffer);
+  }
+}
+
 static void start_work() {
   time_t future_time = time(NULL) + 1500;
   s_wakeup_id = wakeup_schedule(future_time, WAKEUP_REASON, true);
@@ -101,6 +126,7 @@ static void selectclick_handler(ClickRecognizerRef recognizer, void *context) {
     case BREAKING:
       break;
   }
+  update_timer();
 }
 
 static void downclick_handler(ClickRecognizerRef recognizer, void *context) {
@@ -128,6 +154,7 @@ static void downclick_handler(ClickRecognizerRef recognizer, void *context) {
       break;
   }
   wakeup_cancel_all();
+  update_timer();
 }
 
 static void wakeup_handler(WakeupId id, int32_t reason) {
@@ -151,31 +178,6 @@ static void wakeup_handler(WakeupId id, int32_t reason) {
 static void config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_SELECT, selectclick_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, downclick_handler);
-}
-
-static void update_timer() {
-  switch(s_state) {
-    case NOTHING:
-      text_layer_set_text(s_time_layer, "25:00");
-      return;
-    case PAUSING:
-      break;
-    case WORKING:
-      break;
-    case BREAKING:
-      break;
-  }
-  if (s_wakeup_id == 0) {
-    s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
-  }
-  time_t wakeup_timestamp = 0;
-  if (wakeup_query(s_wakeup_id, &wakeup_timestamp)) {
-    int remaining = wakeup_timestamp - time(NULL);
-    int minutes = remaining / 60;
-    int seconds = remaining % 60;
-    snprintf(s_buffer, sizeof(s_buffer), "%02d:%02d", minutes, seconds);
-    text_layer_set_text(s_time_layer, s_buffer);
-  }
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
