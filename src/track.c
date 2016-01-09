@@ -232,6 +232,13 @@ static void window_load(Window *window) {
   text_layer_set_background_color(s_time_layer, GColorClear);
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
 
+  wakeup_service_subscribe(wakeup_handler);
+
+  layer_set_update_proc(s_layer, update_display);
+  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
+}
+
+static void window_appear(Window *window) {
   s_state = persist_read_int(PERSIST_STATE);
   int remaining, minutes, seconds;
   switch(s_state) {
@@ -252,7 +259,6 @@ static void window_load(Window *window) {
       action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, NULL);
       break;
   }
-  wakeup_service_subscribe(wakeup_handler);
   if (launch_reason() == APP_LAUNCH_WAKEUP) {
     WakeupId id = 0;
     int32_t reason = 0;
@@ -262,9 +268,6 @@ static void window_load(Window *window) {
   else {
     s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
   }
-
-  layer_set_update_proc(s_layer, update_display);
-  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
 }
 
 static void window_unload(Window *window) {
@@ -278,6 +281,7 @@ void create_track_window() {
   window_set_window_handlers(s_window, (WindowHandlers) {
       .load = window_load,
       .unload = window_unload,
+      .appear = window_appear,
   });
 
   s_icon_start = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_ACTION_ICON_START);
