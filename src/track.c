@@ -1,12 +1,13 @@
 #include <pebble.h>
 #include "track.h"
+#include "items.h"
 
 static Window *s_window;
 static Layer *s_layer;
 static ActionBarLayer *s_actionbar;
 static StatusBarLayer *s_statusbar;
 static TextLayer *s_time_layer;
-static GBitmap *s_icon_stop, *s_icon_start, *s_icon_pause;
+static GBitmap *s_icon_stop, *s_icon_start, *s_icon_pause, *s_icon_menu;
 static char s_buffer[32];
 
 static State s_state;
@@ -44,6 +45,7 @@ static void start_work() {
 
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_pause);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
+  action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, NULL);
 
   s_state = WORKING;
   persist_write_int(PERSIST_STATE, s_state);
@@ -70,6 +72,7 @@ static void pause_work() {
   persist_delete(PERSIST_WAKEUP_ID);
 
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_start);
+  action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
 
   s_state = PAUSING;
@@ -106,6 +109,7 @@ static void stop_break() {
   persist_delete(PERSIST_WAKEUP_ID);
 
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_start);
+  action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, NULL);
 
   s_state = NOTHING;
@@ -127,6 +131,21 @@ static void selectclick_handler(ClickRecognizerRef recognizer, void *context) {
       break;
   }
   update_timer();
+}
+
+static void upclick_handler(ClickRecognizerRef recognizer, void *context) {
+  switch(s_state) {
+    case NOTHING:
+      show_items();
+      break;
+    case WORKING:
+      break;
+    case PAUSING:
+      show_items();
+      break;
+    case BREAKING:
+      break;
+  }
 }
 
 static void downclick_handler(ClickRecognizerRef recognizer, void *context) {
@@ -176,6 +195,7 @@ static void wakeup_handler(WakeupId id, int32_t reason) {
 }
 
 static void config_provider(void *context) {
+  window_single_click_subscribe(BUTTON_ID_UP, upclick_handler);
   window_single_click_subscribe(BUTTON_ID_SELECT, selectclick_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, downclick_handler);
 }
@@ -228,6 +248,7 @@ static void window_load(Window *window) {
   s_actionbar = action_bar_layer_create();
   action_bar_layer_set_background_color(s_actionbar, GColorClear);
   action_bar_layer_add_to_window(s_actionbar, window);
+  action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_start);
   action_bar_layer_set_click_config_provider(s_actionbar, config_provider);
@@ -249,9 +270,11 @@ static void window_appear(Window *window) {
   int remaining, minutes, seconds;
   switch(s_state) {
     case NOTHING:
+      action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
       action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, NULL);
       break;
     case WORKING:
+      action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, NULL);
       action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_pause);
       break;
     case PAUSING:
@@ -294,11 +317,13 @@ void create_track_window() {
   s_icon_start = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_ACTION_ICON_START);
   s_icon_stop = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_ACTION_ICON_STOP);
   s_icon_pause = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_ACTION_ICON_PAUSE);
+  s_icon_menu = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_ACTION_ICON_MENU);
 
   window_stack_push(s_window, false);
 }
 
 void destroy_track_window() {
+  gbitmap_destroy(s_icon_menu);
   gbitmap_destroy(s_icon_pause);
   gbitmap_destroy(s_icon_stop);
   gbitmap_destroy(s_icon_start);
