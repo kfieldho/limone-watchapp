@@ -297,8 +297,6 @@ void create_track_window() {
 }
 
 void destroy_track_window() {
-  window_stack_pop(s_window);
-
   gbitmap_destroy(s_icon_pause);
   gbitmap_destroy(s_icon_stop);
   gbitmap_destroy(s_icon_start);
