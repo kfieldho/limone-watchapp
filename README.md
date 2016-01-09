@@ -26,8 +26,11 @@ with a Lemon kitchen timer, not a Tomato one.
 
 ## Installation
 
-This is a 3rd party pebble watchapp, install at your own risk.
-Latest release is availavle from [Github Release](https://github.com/uchida/limone-watchapp/releases).
+Limone watchapp is available from [Pebble Appstore](https://apps.getpebble.com/en_US/application/569061bfd5ba00104e000016)
+
+Watchapp PBW files, including latest version unreleased to appstore, or past versions, are 
+available from [Github Release](https://github.com/uchida/limone-watchapp).
+However, using these version are not recommended, install these versions at your own risk.
 
 ## License
 
