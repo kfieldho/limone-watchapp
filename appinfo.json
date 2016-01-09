@@ -10,7 +10,9 @@
     "watchface": false
   },
   "appKeys": {
-    "dummy": 0
+    "fetch_items": 0,
+    "ITEM_ID": 1,
+    "ITEM_NAME": 2
   },
   "resources": {
     "media": [
@@ -28,6 +30,11 @@
         "type": "bitmap",
         "name": "IMAGE_ACTION_ICON_PAUSE",
         "file": "images/action_icon_pause.png"
+      },
+      {
+        "type": "bitmap",
+        "name": "IMAGE_ACTION_ICON_MENU",
+        "file": "images/action_icon_menu.png"
       }
     ]
   }
