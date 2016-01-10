@@ -12,7 +12,10 @@
   "appKeys": {
     "fetch_items": 0,
     "ITEM_ID": 1,
-    "ITEM_NAME": 2
+    "ITEM_NAME": 2,
+    "STARTED": 3,
+    "ENDED": 4,
+    "TITLE": 5
   },
   "resources": {
     "media": [
