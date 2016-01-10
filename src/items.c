@@ -4,8 +4,10 @@
 static Window *s_window;
 static MenuLayer *s_menulayer;
 
-static Item items[64];
+static Item items[32];
 static int count = 0;
+
+extern char title[64];
 
 static void add_item(uint32_t id, char* name) {
   if (count == 32) {
@@ -22,6 +24,12 @@ static void add_item(uint32_t id, char* name) {
 }
 
 static void fetch_items() {
+  if (count == 0) {
+    strcpy(items[count].name, "None");
+    items[count].id = 0;
+    count++;
+    menu_layer_reload_data(s_menulayer);
+  }
   DictionaryIterator *iter;
   if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
     return;
@@ -52,10 +60,11 @@ static int16_t get_cell_height_callback(MenuLayer *s_menulayer, MenuIndex *cell_
 
 static void draw_row_handler(GContext *ctx, const Layer *cell_layer, MenuIndex *cell_index, void *callback_context) {
   char* name = items[cell_index->row].name;
-  menu_cell_basic_draw(ctx, cell_layer, NULL, name, NULL);
+  menu_cell_basic_draw(ctx, cell_layer, name, NULL, NULL);
 }
 
 static void select_callback(struct MenuLayer *s_menulayer, MenuIndex *cell_index, void *callback_context) {
+  strcpy(title, items[cell_index->row].name);
   window_stack_pop(false);
 }
 

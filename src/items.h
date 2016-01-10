@@ -8,7 +8,7 @@
 
 typedef struct {
   uint32_t id;
-  char name[32];
+  char name[64];
 } Item;
 
 void create_item_window();

@@ -1,9 +1,21 @@
-var token = '';
-var endpoint = 'https://todoist.com/API/v6/sync';
+var todoist_token = '';
+var todoist_endpoint = 'https://todoist.com/API/v6/sync';
+
+var ifttt_token = '';
+var ifttt_event = ''
+var ifttt_endpoint = 'https://maker.ifttt.com/trigger/';
+
+function post(payload) {
+  var req = new XMLHttpRequest();
+  req.open('POST', ifttt_endpoint + ifttt_event + '/with/key/' + ifttt_token, true);
+  req.setRequestHeader("Content-Type", "application/json");
+  var data = {"value1": payload.TITLE, "value2": payload.STARTED, "value3": payload.ENDED};
+  req.send(JSON.stringify(data));
+}
 
 function fetch() {
   var req = new XMLHttpRequest();
-  req.open('GET', endpoint + '?token=' + token + '&seq_no=0' + '&resource_types=' + encodeURIComponent('["items"]'), true);
+  req.open('GET', todoist_endpoint + '?token=' + todoist_token + '&seq_no=0' + '&resource_types=' + encodeURIComponent('["items"]'), true);
   req.onload = function () {
     if (req.readyState === 4 && req.status === 200) {
       var response = JSON.parse(req.responseText);
@@ -40,5 +52,8 @@ Pebble.addEventListener('appmessage', function (e) {
   console.log("message:" + JSON.stringify(e.payload));
   if (e.payload.hasOwnProperty("fetch_items")) {
     fetch();
+  }
+  if (e.payload.hasOwnProperty("TITLE")) {
+    post(e.payload);
   }
 });

@@ -2,6 +2,8 @@
 #include "track.h"
 #include "items.h"
 
+extern char title[64];
+
 static Window *s_window;
 static Layer *s_layer;
 static ActionBarLayer *s_actionbar;
@@ -12,6 +14,8 @@ static char s_buffer[32];
 
 static State s_state;
 static WakeupId s_wakeup_id;
+
+static char s_started[26], s_ended[26];
 
 static void update_timer() {
   switch(s_state) {
@@ -38,8 +42,31 @@ static void update_timer() {
   }
 }
 
+static void post_ifttt() {
+  DictionaryIterator *iter;
+  if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
+    return;
+  }
+  char buffer[26];
+  if (dict_write_cstring(iter, STARTED, s_started) != DICT_OK) {
+    return;
+  }
+  if (dict_write_cstring(iter, ENDED, s_ended) != DICT_OK) {
+    return;
+  }
+  if (dict_write_cstring(iter, TITLE, title) != DICT_OK) {
+    return;
+  }
+  app_message_outbox_send();
+}
+
 static void start_work() {
-  time_t future_time = time(NULL) + 1500;
+  time_t now = time(NULL);
+  if (s_state == NOTHING) {
+    struct tm *time_info = localtime(&now);
+    strftime(s_started, 26, "%m/%d %H:%M", time_info);
+  }
+  time_t future_time = now + 1500;
   s_wakeup_id = wakeup_schedule(future_time, WAKEUP_REASON, true);
   persist_write_int(PERSIST_WAKEUP_ID, s_wakeup_id);
 
@@ -58,6 +85,11 @@ static void stop_work() {
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
 
   persist_write_int(PERSIST_STATE, s_state);
+  time_t now = time(NULL);
+  struct tm *time_info = localtime(&now);
+  strftime(s_ended, 26, "%m/%d %H:%M", time_info);
+
+  post_ifttt();
 }
 
 static void pause_work() {
