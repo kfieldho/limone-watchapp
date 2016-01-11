@@ -9,16 +9,20 @@ static int count = 0;
 
 extern char title[MAX_TITLE_LENGTH];
 
-static void add_item(uint32_t id, char* name) {
+static void add_item(Tuple *tuple_id, Tuple *tuple_name) {
   if (count == MAX_ITEMS_LENGTH) {
     return;
   }
+  uint32_t id = tuple_id->value->uint32;
   for (int i = 0; i < count; ++i) {
     if (id == items[i].id) {
       return;
     }
   }
-  strcpy(items[count].name, name);
+  strncpy(items[count].name, tuple_name->value->cstring, MAX_TITLE_LENGTH - 1);
+  if (tuple_name->length > MAX_TITLE_LENGTH - 1) {
+    *(items[count].name + MAX_TITLE_LENGTH - 1) = '\0';
+  }
   items[count].id = id;
   count++;
 }
@@ -72,7 +76,7 @@ static void received_handler(DictionaryIterator *iter, void *context) {
   Tuple *tuple_id = dict_find(iter, ITEM_ID);
   Tuple *tuple_name = dict_find(iter, ITEM_NAME);
   if (tuple_id && tuple_name) {
-    add_item(tuple_id->value->uint32, tuple_name->value->cstring);
+    add_item(tuple_id, tuple_name);
     menu_layer_reload_data(s_menulayer);
   }
 }
