@@ -89,6 +89,14 @@ Date.prototype.strftime = function (fmt) {
 };
 
 function post(payload) {
+  if (options.ifttt_token === '') {
+    console.log("IFTTT Maker token is not available");
+    return;
+  }
+  if (options.ifttt_event === '') {
+    console.log("IFTTT Make event name is not available");
+    return;
+  }
   var req = new XMLHttpRequest();
   req.open('POST', ifttt_endpoint + options.ifttt_event + '/with/key/' + options.ifttt_token, true);
   req.setRequestHeader("Content-Type", "application/json");
@@ -99,6 +107,10 @@ function post(payload) {
 }
 
 function fetch() {
+  if (options.todoist_token === '') {
+    console.log("Todoist API token is not available");
+    return;
+  }
   var req = new XMLHttpRequest();
   req.open('GET', todoist_endpoint + '?token=' + options.todoist_token + '&seq_no=0' + '&resource_types=' + encodeURIComponent('["items"]'), true);
   req.onload = function () {
