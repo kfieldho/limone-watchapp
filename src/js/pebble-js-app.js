@@ -50,7 +50,7 @@ Pebble.addEventListener('ready', function (e) {
 
 Pebble.addEventListener('appmessage', function (e) {
   console.log("message:" + JSON.stringify(e.payload));
-  if (e.payload.hasOwnProperty("fetch_items")) {
+  if (e.payload.hasOwnProperty("FETCH_ITEMS")) {
     fetch();
   }
   if (e.payload.hasOwnProperty("TITLE")) {
