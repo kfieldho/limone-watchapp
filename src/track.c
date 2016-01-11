@@ -15,7 +15,7 @@ static char s_buffer[32];
 static State s_state;
 static WakeupId s_wakeup_id;
 
-static char s_started[26], s_ended[26];
+static time_t s_started, s_ended;
 
 static void update_timer() {
   switch(s_state) {
@@ -48,10 +48,10 @@ static void post_ifttt() {
     return;
   }
   char buffer[26];
-  if (dict_write_cstring(iter, STARTED, s_started) != DICT_OK) {
+  if (dict_write_uint32(iter, STARTED, s_started) != DICT_OK) {
     return;
   }
-  if (dict_write_cstring(iter, ENDED, s_ended) != DICT_OK) {
+  if (dict_write_uint32(iter, ENDED, s_ended) != DICT_OK) {
     return;
   }
   if (dict_write_cstring(iter, TITLE, title) != DICT_OK) {
@@ -61,12 +61,8 @@ static void post_ifttt() {
 }
 
 static void start_work() {
-  time_t now = time(NULL);
-  if (s_state == NOTHING) {
-    struct tm *time_info = localtime(&now);
-    strftime(s_started, 26, "%m/%d %H:%M", time_info);
-  }
-  time_t future_time = now + 1500;
+  s_started = time(NULL);
+  time_t future_time = s_started + 1500;
   s_wakeup_id = wakeup_schedule(future_time, WAKEUP_REASON, true);
   persist_write_int(PERSIST_WAKEUP_ID, s_wakeup_id);
 
@@ -85,9 +81,7 @@ static void stop_work() {
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
 
   persist_write_int(PERSIST_STATE, s_state);
-  time_t now = time(NULL);
-  struct tm *time_info = localtime(&now);
-  strftime(s_ended, 26, "%m/%d %H:%M", time_info);
+  s_ended = time(NULL);
 
   post_ifttt();
 }
