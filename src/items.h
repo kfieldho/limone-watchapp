@@ -7,7 +7,7 @@
 #define ITEM_NAME 2
 
 #define MAX_ITEMS_LENGTH 32
-#define MAX_TITLE_LENGTH 64
+#define MAX_TITLE_LENGTH 60
 
 typedef struct {
   uint32_t id;
