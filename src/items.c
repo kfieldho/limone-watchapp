@@ -25,7 +25,7 @@ static void add_item(uint32_t id, char* name) {
 
 static void fetch_items() {
   if (count == 0) {
-    strcpy(items[count].name, "None");
+    strcpy(items[count].name, "Pomodoro");
     items[count].id = 0;
     count++;
     menu_layer_reload_data(s_menulayer);
