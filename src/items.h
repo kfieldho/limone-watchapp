@@ -6,9 +6,12 @@
 #define ITEM_ID 1
 #define ITEM_NAME 2
 
+#define MAX_ITEMS_LENGTH 32
+#define MAX_TITLE_LENGTH 64
+
 typedef struct {
   uint32_t id;
-  char name[64];
+  char name[MAX_TITLE_LENGTH];
 } Item;
 
 void create_item_window();
