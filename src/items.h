@@ -6,7 +6,7 @@
 #define ITEM_ID 1
 #define ITEM_NAME 2
 
-#define MAX_ITEMS_LENGTH 32
+#define MAX_ITEMS_LENGTH 16
 #define MAX_TITLE_LENGTH 60
 
 typedef struct {
