@@ -2,7 +2,7 @@
 #include "track.h"
 #include "items.h"
 
-char title[64];
+char title[MAX_TITLE_LENGTH];
 
 static void init(void) {
   strcpy(title, "None");

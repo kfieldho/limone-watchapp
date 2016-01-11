@@ -2,7 +2,7 @@
 #include "track.h"
 #include "items.h"
 
-extern char title[64];
+extern char title[MAX_TITLE_LENGTH];
 
 static Window *s_window;
 static Layer *s_layer;

@@ -4,13 +4,13 @@
 static Window *s_window;
 static MenuLayer *s_menulayer;
 
-static Item items[32];
+static Item items[MAX_ITEMS_LENGTH];
 static int count = 0;
 
-extern char title[64];
+extern char title[MAX_TITLE_LENGTH];
 
 static void add_item(uint32_t id, char* name) {
-  if (count == 32) {
+  if (count == MAX_ITEMS_LENGTH) {
     return;
   }
   for (int i = 0; i < count; ++i) {
