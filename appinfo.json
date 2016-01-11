@@ -10,7 +10,7 @@
     "watchface": false
   },
   "appKeys": {
-    "fetch_items": 0,
+    "FETCH_ITEMS": 0,
     "ITEM_ID": 1,
     "ITEM_NAME": 2,
     "STARTED": 3,
