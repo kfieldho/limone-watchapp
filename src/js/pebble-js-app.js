@@ -1,3 +1,5 @@
+"use strict;"
+
 var todoist_token = '';
 var todoist_endpoint = 'https://todoist.com/API/v6/sync';
 
