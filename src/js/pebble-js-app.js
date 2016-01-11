@@ -1,13 +1,15 @@
 "use strict;"
 
-var todoist_token = '';
-var todoist_endpoint = 'https://todoist.com/API/v6/sync';
+var options = {
+  "todoist_token": "",
+  "ifttt_token": "",
+  "ifttt_event": "",
+  "start_fmt": "%Y-%m-%dT%H:%M:%S%Z",
+  "end_fmt": "%Y-%m-%dT%H:%M:%S%Z"
+}
 
-var ifttt_token = '';
-var ifttt_event = ''
+var todoist_endpoint = 'https://todoist.com/API/v6/sync';
 var ifttt_endpoint = 'https://maker.ifttt.com/trigger/';
-var start_fmt = "%Y-%m-%dT%H:%M:%S%z";
-var end_fmt = "%Y-%m-%dT%H:%M:%S%z";
 
 // some modification from public domain software http://dren.ch/strftime/
 Number.prototype.pad = function (n,p) {
@@ -88,17 +90,17 @@ Date.prototype.strftime = function (fmt) {
 
 function post(payload) {
   var req = new XMLHttpRequest();
-  req.open('POST', ifttt_endpoint + ifttt_event + '/with/key/' + ifttt_token, true);
+  req.open('POST', ifttt_endpoint + options.ifttt_event + '/with/key/' + options.ifttt_token, true);
   req.setRequestHeader("Content-Type", "application/json");
   var started = new Date(payload.STARTED * 1000);
   var ended = new Date(payload.ENDED * 1000);
-  var data = {"value1": payload.TITLE, "value2": started.strftime(start_fmt), "value3": ended.strftime(end_fmt)};
+  var data = {"value1": payload.TITLE, "value2": started.strftime(options.start_fmt), "value3": ended.strftime(options.end_fmt)};
   req.send(JSON.stringify(data));
 }
 
 function fetch() {
   var req = new XMLHttpRequest();
-  req.open('GET', todoist_endpoint + '?token=' + todoist_token + '&seq_no=0' + '&resource_types=' + encodeURIComponent('["items"]'), true);
+  req.open('GET', todoist_endpoint + '?token=' + options.todoist_token + '&seq_no=0' + '&resource_types=' + encodeURIComponent('["items"]'), true);
   req.onload = function () {
     if (req.readyState === 4 && req.status === 200) {
       var response = JSON.parse(req.responseText);
@@ -139,4 +141,15 @@ Pebble.addEventListener('appmessage', function (e) {
   if (e.payload.hasOwnProperty("TITLE")) {
     post(e.payload);
   }
+});
+
+Pebble.addEventListener("showConfiguration", function() {
+  console.log("showing configuration");
+  Pebble.openURL('http://pebble.turbare.net/limone-watchapp/configurable.html');
+});
+
+Pebble.addEventListener("webviewclosed", function(e) {
+  console.log("configuration closed");
+  options = JSON.parse(decodeURIComponent(e.response));
+  console.log('Config window returned: ', JSON.stringify(options));
 });
