@@ -40,5 +40,5 @@ deployment:
   release:
     tag: /[0-9]+\.[0-9]+/
     commands:
-      - aws s3 sync assets/ s3://pebble.turbare.net/${CIRCLE_PROJECT_REPONAME}/
+      - aws s3 sync --acl public-read --storage-class REDUCED_REDUNDANCY assets/ s3://pebble.turbare.net/${CIRCLE_PROJECT_REPONAME}/
       - hub release create -a "build/${CIRCLE_PROJECT_REPONAME}.pbw" -m "Release ${CIRCLE_TAG}" "${CIRCLE_TAG}"
