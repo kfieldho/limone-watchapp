@@ -3,7 +3,7 @@
   "shortName": "limone",
   "longName": "Limone",
   "companyName": "Akihiro Uchida",
-  "versionLabel": "0.1",
+  "versionLabel": "0.2",
   "sdkVersion": "3",
   "targetPlatforms": ["aplite", "basalt", "chalk"],
   "capabilities": ["configurable"],
