@@ -6,8 +6,8 @@
 #define PERSIST_REMAINING 43
 #define PERSIST_STATE 47
 
-#define STARTED 3
-#define ENDED 4
+#define FROM 3
+#define TO 4
 #define TITLE 5
 
 typedef enum { NOTHING, WORKING, BREAKING, PAUSING } State;

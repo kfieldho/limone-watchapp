@@ -15,7 +15,7 @@ static char s_buffer[32];
 static State s_state;
 static WakeupId s_wakeup_id;
 
-static time_t s_started, s_ended;
+static time_t s_to, s_from;
 
 static void update_timer() {
   switch(s_state) {
@@ -48,10 +48,10 @@ static void post_ifttt() {
     return;
   }
   char buffer[26];
-  if (dict_write_uint32(iter, STARTED, s_started) != DICT_OK) {
+  if (dict_write_uint32(iter, FROM, s_from) != DICT_OK) {
     return;
   }
-  if (dict_write_uint32(iter, ENDED, s_ended) != DICT_OK) {
+  if (dict_write_uint32(iter, TO, s_to) != DICT_OK) {
     return;
   }
   if (dict_write_cstring(iter, TITLE, title) != DICT_OK) {
@@ -61,8 +61,8 @@ static void post_ifttt() {
 }
 
 static void start_work() {
-  s_started = time(NULL);
-  time_t future_time = s_started + 1500;
+  s_from = time(NULL);
+  time_t future_time = s_from + 1500;
   s_wakeup_id = wakeup_schedule(future_time, WAKEUP_REASON, true);
   persist_write_int(PERSIST_WAKEUP_ID, s_wakeup_id);
 
@@ -81,7 +81,7 @@ static void stop_work() {
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
 
   persist_write_int(PERSIST_STATE, s_state);
-  s_ended = time(NULL);
+  s_to = time(NULL);
 
   post_ifttt();
 }
