@@ -6,8 +6,8 @@ var options = {
   "ifttt_started": "",
   "ifttt_canceled": "",
   "ifttt_finished": "",
-  "from_fmt": "%Y-%m-%dT%H:%M:%S%Z",
-  "to_fmt": "%Y-%m-%dT%H:%M:%S%Z"
+  "from_fmt": "%Y-%m-%dT%H:%M:%S%z",
+  "to_fmt": "%Y-%m-%dT%H:%M:%S%z"
 }
 
 var todoist_endpoint = 'https://todoist.com/API/v6/sync';
