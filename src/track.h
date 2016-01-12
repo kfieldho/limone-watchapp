@@ -5,6 +5,8 @@
 #define PERSIST_WAKEUP_ID 41
 #define PERSIST_REMAINING 43
 #define PERSIST_STATE 47
+#define PERSIST_TITLE 53
+#define PERSIST_FROM 59
 
 #define FROM 3
 #define TO 4

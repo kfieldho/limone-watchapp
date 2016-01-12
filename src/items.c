@@ -1,4 +1,5 @@
 #include <pebble.h>
+#include "track.h"
 #include "items.h"
 
 static Window *s_window;
@@ -69,6 +70,7 @@ static void draw_row_handler(GContext *ctx, const Layer *cell_layer, MenuIndex *
 
 static void select_callback(struct MenuLayer *s_menulayer, MenuIndex *cell_index, void *callback_context) {
   strcpy(title, items[cell_index->row].name);
+  persist_write_string(PERSIST_TITLE, title);
   window_stack_pop(false);
 }
 
