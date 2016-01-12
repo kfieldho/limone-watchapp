@@ -62,6 +62,7 @@ static void post_ifttt() {
 
 static void start_work() {
   s_from = time(NULL);
+  persist_write_int(PERSIST_FROM, s_from);
   time_t future_time = s_from + 1500;
   s_wakeup_id = wakeup_schedule(future_time, WAKEUP_REASON, true);
   persist_write_int(PERSIST_WAKEUP_ID, s_wakeup_id);
@@ -314,6 +315,8 @@ static void window_appear(Window *window) {
       action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, NULL);
       break;
   }
+  persist_read_string(PERSIST_TITLE, title, MAX_TITLE_LENGTH);
+  s_from = persist_read_int(PERSIST_FROM);
   if (launch_reason() == APP_LAUNCH_WAKEUP) {
     WakeupId id = 0;
     int32_t reason = 0;
