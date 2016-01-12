@@ -38,6 +38,12 @@ screenshots for work/break timer in Aplite, Basalt, Chalk are following.
 ![break timer for basalt](screenshots/basalt-screenshot2.png)
 ![break timer for chalk](screenshots/chalk-screenshot2.png)
 
+and screenshots for task select menu in Aplite, Basalt, Chalk
+
+![task select menu for aplite](screenshots/aplite-screenshot3.png)
+![task select menu for basalt](screenshots/basalt-screenshot3.png)
+![task select menu for chalk](screenshots/chalk-screenshot3.png)
+
 The pebble watchapp name is Limone, because I started pomodoro technique
 with a Lemon kitchen timer, not a Tomato one.
 
