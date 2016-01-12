@@ -22,7 +22,7 @@ static void add_item(Tuple *tuple_id, Tuple *tuple_name) {
   }
   strncpy(items[count].name, tuple_name->value->cstring, MAX_TITLE_LENGTH - 1);
   if (tuple_name->length > MAX_TITLE_LENGTH - 1) {
-    *(items[count].name + MAX_TITLE_LENGTH - 1) = '\0';
+    items[count].name[MAX_TITLE_LENGTH - 1] = '\0';
   }
   items[count].id = id;
   count++;
