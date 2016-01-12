@@ -29,7 +29,7 @@ static void update_timer() {
     case BREAKING:
       break;
   }
-  if (s_wakeup_id == 0) {
+  if (s_wakeup_id == 0 && persist_exists(PERSIST_WAKEUP_ID)) {
     s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
   }
   time_t wakeup_timestamp = 0;
@@ -89,7 +89,9 @@ static void stop_work() {
 }
 
 static void pause_work() {
-  s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
+  if (persist_exists(PERSIST_WAKEUP_ID)) {
+    s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
+  }
   time_t wakeup_timestamp = 0;
   if (wakeup_query(s_wakeup_id, &wakeup_timestamp)) {
     int remaining = wakeup_timestamp - time(NULL);
@@ -297,7 +299,9 @@ static void window_load(Window *window) {
 }
 
 static void window_appear(Window *window) {
-  s_state = persist_read_int(PERSIST_STATE);
+  if (persist_exists(PERSIST_STATE)) {
+    s_state = persist_read_int(PERSIST_STATE);
+  }
   int remaining, minutes, seconds;
   switch(s_state) {
     case NOTHING:
@@ -319,8 +323,12 @@ static void window_appear(Window *window) {
       action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, NULL);
       break;
   }
-  persist_read_string(PERSIST_TITLE, title, MAX_TITLE_LENGTH);
-  s_from = persist_read_int(PERSIST_FROM);
+  if (persist_exists(PERSIST_TITLE)) {
+    persist_read_string(PERSIST_TITLE, title, MAX_TITLE_LENGTH);
+  }
+  if (persist_exists(PERSIST_FROM)) {
+    s_from = persist_read_int(PERSIST_FROM);
+  }
   if (launch_reason() == APP_LAUNCH_WAKEUP) {
     WakeupId id = 0;
     int32_t reason = 0;
@@ -328,7 +336,9 @@ static void window_appear(Window *window) {
     wakeup_handler(id, reason);
   }
   else {
-    s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
+    if (persist_exists(PERSIST_WAKEUP_ID)) {
+      s_wakeup_id = persist_read_int(PERSIST_WAKEUP_ID);
+    }
   }
   update_timer();
 }
