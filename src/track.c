@@ -1,16 +1,21 @@
 #include <pebble.h>
 #include "track.h"
+#include "items.h"
+
+extern char title[MAX_TITLE_LENGTH];
 
 static Window *s_window;
 static Layer *s_layer;
 static ActionBarLayer *s_actionbar;
 static StatusBarLayer *s_statusbar;
 static TextLayer *s_time_layer;
-static GBitmap *s_icon_stop, *s_icon_start, *s_icon_pause;
+static GBitmap *s_icon_stop, *s_icon_start, *s_icon_pause, *s_icon_menu;
 static char s_buffer[32];
 
 static State s_state;
 static WakeupId s_wakeup_id;
+
+static time_t s_to, s_from;
 
 static void update_timer() {
   switch(s_state) {
@@ -37,13 +42,37 @@ static void update_timer() {
   }
 }
 
+static void post_ifttt(uint8_t trigger) {
+  DictionaryIterator *iter;
+  if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
+    return;
+  }
+  char buffer[26];
+  if (dict_write_uint32(iter, FROM, s_from) != DICT_OK) {
+    return;
+  }
+  if (dict_write_uint32(iter, TO, s_to) != DICT_OK) {
+    return;
+  }
+  if (dict_write_cstring(iter, TITLE, title) != DICT_OK) {
+    return;
+  }
+  if (dict_write_uint8(iter, trigger, 1) != DICT_OK) {
+    return;
+  }
+  app_message_outbox_send();
+}
+
 static void start_work() {
-  time_t future_time = time(NULL) + 1500;
+  s_from = time(NULL);
+  persist_write_int(PERSIST_FROM, s_from);
+  time_t future_time = s_from + 1500;
   s_wakeup_id = wakeup_schedule(future_time, WAKEUP_REASON, true);
   persist_write_int(PERSIST_WAKEUP_ID, s_wakeup_id);
 
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_pause);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
+  action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, NULL);
 
   s_state = WORKING;
   persist_write_int(PERSIST_STATE, s_state);
@@ -56,6 +85,7 @@ static void stop_work() {
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
 
   persist_write_int(PERSIST_STATE, s_state);
+  s_to = time(NULL);
 }
 
 static void pause_work() {
@@ -70,6 +100,7 @@ static void pause_work() {
   persist_delete(PERSIST_WAKEUP_ID);
 
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_start);
+  action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
 
   s_state = PAUSING;
@@ -106,6 +137,7 @@ static void stop_break() {
   persist_delete(PERSIST_WAKEUP_ID);
 
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_start);
+  action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, NULL);
 
   s_state = NOTHING;
@@ -116,6 +148,7 @@ static void selectclick_handler(ClickRecognizerRef recognizer, void *context) {
   switch(s_state) {
     case NOTHING:
       start_work();
+      post_ifttt(STARTED);
       break;
     case WORKING:
       pause_work();
@@ -129,6 +162,21 @@ static void selectclick_handler(ClickRecognizerRef recognizer, void *context) {
   update_timer();
 }
 
+static void upclick_handler(ClickRecognizerRef recognizer, void *context) {
+  switch(s_state) {
+    case NOTHING:
+      show_items();
+      break;
+    case WORKING:
+      break;
+    case PAUSING:
+      show_items();
+      break;
+    case BREAKING:
+      break;
+  }
+}
+
 static void downclick_handler(ClickRecognizerRef recognizer, void *context) {
   switch(s_state) {
     case NOTHING:
@@ -139,6 +187,7 @@ static void downclick_handler(ClickRecognizerRef recognizer, void *context) {
       start_break();
       wakeup_cancel(s_wakeup_id);
       stop_break();
+      post_ifttt(CANCELED);
       break;
     case PAUSING:
       resume_work();
@@ -164,6 +213,7 @@ static void wakeup_handler(WakeupId id, int32_t reason) {
     case WORKING:
       stop_work();
       vibes_short_pulse();
+      post_ifttt(FINISHED);
       start_break();
       break;
     case PAUSING:
@@ -176,6 +226,7 @@ static void wakeup_handler(WakeupId id, int32_t reason) {
 }
 
 static void config_provider(void *context) {
+  window_single_click_subscribe(BUTTON_ID_UP, upclick_handler);
   window_single_click_subscribe(BUTTON_ID_SELECT, selectclick_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, downclick_handler);
 }
@@ -228,6 +279,7 @@ static void window_load(Window *window) {
   s_actionbar = action_bar_layer_create();
   action_bar_layer_set_background_color(s_actionbar, GColorClear);
   action_bar_layer_add_to_window(s_actionbar, window);
+  action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_start);
   action_bar_layer_set_click_config_provider(s_actionbar, config_provider);
@@ -249,9 +301,11 @@ static void window_appear(Window *window) {
   int remaining, minutes, seconds;
   switch(s_state) {
     case NOTHING:
+      action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
       action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, NULL);
       break;
     case WORKING:
+      action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, NULL);
       action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_pause);
       break;
     case PAUSING:
@@ -265,6 +319,8 @@ static void window_appear(Window *window) {
       action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, NULL);
       break;
   }
+  persist_read_string(PERSIST_TITLE, title, MAX_TITLE_LENGTH);
+  s_from = persist_read_int(PERSIST_FROM);
   if (launch_reason() == APP_LAUNCH_WAKEUP) {
     WakeupId id = 0;
     int32_t reason = 0;
@@ -294,11 +350,13 @@ void create_track_window() {
   s_icon_start = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_ACTION_ICON_START);
   s_icon_stop = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_ACTION_ICON_STOP);
   s_icon_pause = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_ACTION_ICON_PAUSE);
+  s_icon_menu = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_ACTION_ICON_MENU);
 
   window_stack_push(s_window, false);
 }
 
 void destroy_track_window() {
+  gbitmap_destroy(s_icon_menu);
   gbitmap_destroy(s_icon_pause);
   gbitmap_destroy(s_icon_stop);
   gbitmap_destroy(s_icon_start);

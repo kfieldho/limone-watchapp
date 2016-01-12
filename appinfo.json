@@ -6,11 +6,20 @@
   "versionLabel": "0.1",
   "sdkVersion": "3",
   "targetPlatforms": ["aplite", "basalt", "chalk"],
+  "capabilities": ["configurable"],
   "watchapp": {
     "watchface": false
   },
   "appKeys": {
-    "dummy": 0
+    "fetch_items": 0,
+    "item_id": 8,
+    "item_name": 9,
+    "title": 16,
+    "from": 17,
+    "to": 18,
+    "started": 24,
+    "canceled": 25,
+    "finished": 26
   },
   "resources": {
     "media": [
@@ -28,6 +37,11 @@
         "type": "bitmap",
         "name": "IMAGE_ACTION_ICON_PAUSE",
         "file": "images/action_icon_pause.png"
+      },
+      {
+        "type": "bitmap",
+        "name": "IMAGE_ACTION_ICON_MENU",
+        "file": "images/action_icon_menu.png"
       }
     ]
   }
