@@ -47,7 +47,6 @@ static void post_ifttt(uint8_t trigger) {
   if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
     return;
   }
-  char buffer[26];
   if (dict_write_uint32(iter, FROM, s_from) != DICT_OK) {
     return;
   }
