@@ -4,8 +4,8 @@ var options = {
   "todoist_token": "",
   "ifttt_token": "",
   "ifttt_event": "",
-  "start_fmt": "%Y-%m-%dT%H:%M:%S%Z",
-  "end_fmt": "%Y-%m-%dT%H:%M:%S%Z"
+  "from_fmt": "%Y-%m-%dT%H:%M:%S%z",
+  "to_fmt": "%Y-%m-%dT%H:%M:%S%z"
 }
 
 var todoist_endpoint = 'https://todoist.com/API/v6/sync';
@@ -100,9 +100,9 @@ function post(payload) {
   var req = new XMLHttpRequest();
   req.open('POST', ifttt_endpoint + options.ifttt_event + '/with/key/' + options.ifttt_token, true);
   req.setRequestHeader("Content-Type", "application/json");
-  var started = new Date(payload.STARTED * 1000);
-  var ended = new Date(payload.ENDED * 1000);
-  var data = {"value1": payload.TITLE, "value2": started.strftime(options.start_fmt), "value3": ended.strftime(options.end_fmt)};
+  var from = new Date(payload.FROM * 1000);
+  var to = new Date(payload.TO * 1000);
+  var data = {"value1": payload.TITLE, "value2": from.strftime(options.from_fmt), "value3": to.strftime(options.to_fmt)};
   req.send(JSON.stringify(data));
 }
 
