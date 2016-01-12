@@ -8,9 +8,13 @@
 #define PERSIST_TITLE 53
 #define PERSIST_FROM 59
 
-#define FROM 3
-#define TO 4
-#define TITLE 5
+#define TITLE 16
+#define FROM 17
+#define TO 18
+
+#define STARTED 24
+#define CANCELED 25
+#define FINISHED 26
 
 typedef enum { NOTHING, WORKING, BREAKING, PAUSING } State;
 
