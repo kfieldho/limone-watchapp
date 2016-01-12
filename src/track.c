@@ -101,7 +101,6 @@ static void pause_work() {
   persist_delete(PERSIST_WAKEUP_ID);
 
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_start);
-  action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
 
   s_state = PAUSING;
