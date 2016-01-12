@@ -3,9 +3,11 @@
 var options = {
   "todoist_token": "",
   "ifttt_token": "",
-  "ifttt_event": "",
-  "from_fmt": "%Y-%m-%dT%H:%M:%S%z",
-  "to_fmt": "%Y-%m-%dT%H:%M:%S%z"
+  "ifttt_started": "",
+  "ifttt_canceled": "",
+  "ifttt_finished": "",
+  "from_fmt": "%Y-%m-%dT%H:%M:%S%Z",
+  "to_fmt": "%Y-%m-%dT%H:%M:%S%Z"
 }
 
 var todoist_endpoint = 'https://todoist.com/API/v6/sync';
@@ -89,20 +91,29 @@ Date.prototype.strftime = function (fmt) {
 };
 
 function post(payload) {
-  if (options.ifttt_token === '') {
-    console.log("IFTTT Maker token is not available");
+  var eventName;
+  if (payload.hasOwnProperty("started")) {
+    eventName = options.ifttt_started;
+  }
+  else if (payload.hasOwnProperty("canceled")) {
+    eventName = options.ifttt_canceled;
+  }
+  else if (payload.hasOwnProperty("finished")) {
+    eventName = options.ifttt_finished;
+  }
+  if (eventName === '') {
     return;
   }
-  if (options.ifttt_event === '') {
-    console.log("IFTTT Make event name is not available");
+  if (options.ifttt_token === '') {
+    console.log("IFTTT Maker Channel key is not available");
     return;
   }
   var req = new XMLHttpRequest();
-  req.open('POST', ifttt_endpoint + options.ifttt_event + '/with/key/' + options.ifttt_token, true);
+  req.open('POST', ifttt_endpoint + eventName + '/with/key/' + options.ifttt_token, true);
   req.setRequestHeader("Content-Type", "application/json");
-  var from = new Date(payload.FROM * 1000);
-  var to = new Date(payload.TO * 1000);
-  var data = {"value1": payload.TITLE, "value2": from.strftime(options.from_fmt), "value3": to.strftime(options.to_fmt)};
+  var from = new Date(payload.from * 1000).strftime(options.from_fmt);
+  var to = payload.to > 0 ? new Date(payload.to * 1000).strftime(options.to_fmt) : "";
+  var data = {"value1": payload.title, "value2": from, "value3": to};
   req.send(JSON.stringify(data));
 }
 
@@ -128,8 +139,8 @@ function fetch() {
           var id = e.id;
           var name = e.content;
           Pebble.sendAppMessage({
-            'ITEM_ID': id,
-            'ITEM_NAME': name
+            'item_id': id,
+            'item_name': name
           });
         }
       });
@@ -146,11 +157,12 @@ Pebble.addEventListener('ready', function (e) {
 });
 
 Pebble.addEventListener('appmessage', function (e) {
-  console.log("message:" + JSON.stringify(e.payload));
-  if (e.payload.hasOwnProperty("FETCH_ITEMS")) {
+  if (e.payload.hasOwnProperty("fetch_items")) {
     fetch();
   }
-  if (e.payload.hasOwnProperty("TITLE")) {
+  if (e.payload.hasOwnProperty("started") ||
+      e.payload.hasOwnProperty("canceled") ||
+      e.payload.hasOwnProperty("finished")) {
     post(e.payload);
   }
 });

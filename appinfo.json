@@ -11,12 +11,15 @@
     "watchface": false
   },
   "appKeys": {
-    "FETCH_ITEMS": 0,
-    "ITEM_ID": 1,
-    "ITEM_NAME": 2,
-    "FROM": 3,
-    "TO": 4,
-    "TITLE": 5
+    "fetch_items": 0,
+    "item_id": 8,
+    "item_name": 9,
+    "title": 16,
+    "from": 17,
+    "to": 18,
+    "started": 24,
+    "canceled": 25,
+    "finished": 26
   },
   "resources": {
     "media": [

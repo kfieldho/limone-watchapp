@@ -9,29 +9,33 @@
 <h1 class='title'>Limone Configuration</h1>
 <main>
 <section>
-<h2>IFTTT Maker channel</h2>
 <p>
-<label>token</label>
+<label>IFTTT Maker Channel key</label>
 <input id="ifttt_token" type="password">
 </p>
 <p>
-<label>event name</label>
-<input id="ifttt_event" type="text" autocapitalize="off">
+<label>EventName (Started)</label>
+<input id="ifttt_started" type="text" placeholder="task_started" autocapitalize="off">
 </p>
 <p>
-<label>from time format</label>
+<label>EventName (Canceled)</label>
+<input id="ifttt_canceled" type="text" placeholder="task_canceld" autocapitalize="off">
+</p>
+<p>
+<label>EventName (Finished)</label>
+<input id="ifttt_finished" type="text" placeholder="task_finidhed" autocapitalize="off">
+</p>
+<p>
+<label>Format for Value2</label>
 <input id="from_fmt" type="text" placeholder="%Y-%m-%dT%H:%M:%S%z" autocapitalize="off">
 </p>
 <p>
-<label>to time format</label>
+<label>Format for Value3</label>
 <input id="to_fmt" type="text" placeholder="%Y-%m-%dT%H:%M:%S%z" autocapitalize="off">
 </p>
-</section>
-<section>
-<h2>Todoist</h2>
 <p>
-<label>token</label>
-<input type="password" name="todoist_token">
+<label>Todoist API Token</label>
+<input id="todoist_token" type="password">
 </p>
 </section>
 <section>
@@ -41,7 +45,7 @@
 </body>
 <script>
 "use strict;"
-var keys = ["ifttt_token", "ifttt_event", "from_fmt", "to_fmt", "todoist_token"];
+var keys = ["ifttt_token", "ifttt_started", "ifttt_canceled", "ifttt_finished", "from_fmt", "to_fmt", "todoist_token"];
 function getOptions() {
   var options = {};
   keys.forEach(function(k, i, a) {
@@ -71,7 +75,6 @@ submitButton.addEventListener('click', function() {
   document.location = return_to + encodeURIComponent(JSON.stringify(getOptions()));
 });
 (function() {
-  var keys = ["ifttt_token", "ifttt_event", "from_fmt", "to_fmt", "todoist_token"];
   keys.forEach(function(k, i, a) {
     if(localStorage[k]) {
       var element = document.getElementById(k);

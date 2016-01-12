@@ -42,7 +42,7 @@ static void update_timer() {
   }
 }
 
-static void post_ifttt() {
+static void post_ifttt(uint8_t trigger) {
   DictionaryIterator *iter;
   if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
     return;
@@ -55,6 +55,9 @@ static void post_ifttt() {
     return;
   }
   if (dict_write_cstring(iter, TITLE, title) != DICT_OK) {
+    return;
+  }
+  if (dict_write_uint8(iter, trigger, 1) != DICT_OK) {
     return;
   }
   app_message_outbox_send();
@@ -83,8 +86,6 @@ static void stop_work() {
 
   persist_write_int(PERSIST_STATE, s_state);
   s_to = time(NULL);
-
-  post_ifttt();
 }
 
 static void pause_work() {
@@ -147,6 +148,7 @@ static void selectclick_handler(ClickRecognizerRef recognizer, void *context) {
   switch(s_state) {
     case NOTHING:
       start_work();
+      post_ifttt(STARTED);
       break;
     case WORKING:
       pause_work();
@@ -185,6 +187,7 @@ static void downclick_handler(ClickRecognizerRef recognizer, void *context) {
       start_break();
       wakeup_cancel(s_wakeup_id);
       stop_break();
+      post_ifttt(CANCELED);
       break;
     case PAUSING:
       resume_work();
@@ -210,6 +213,7 @@ static void wakeup_handler(WakeupId id, int32_t reason) {
     case WORKING:
       stop_work();
       vibes_short_pulse();
+      post_ifttt(FINISHED);
       start_break();
       break;
     case PAUSING:

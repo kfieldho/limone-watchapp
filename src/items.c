@@ -30,7 +30,7 @@ static void add_item(Tuple *tuple_id, Tuple *tuple_name) {
 
 static void fetch_items() {
   if (count == 0) {
-    strcpy(items[count].name, "Pomodoro");
+    strcpy(items[count].name, "Task");
     items[count].id = 0;
     count++;
     menu_layer_reload_data(s_menulayer);
