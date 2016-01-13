@@ -26,13 +26,6 @@
 <input id="ifttt_finished" type="text" placeholder="task_finidhed" autocapitalize="off">
 </p>
 <p>
-<label>Format for Value2</label>
-<input id="from_fmt" type="text" placeholder="%Y-%m-%dT%H:%M:%S%z" autocapitalize="off">
-</p>
-<p>
-<label>Format for Value3</label>
-<input id="to_fmt" type="text" placeholder="%Y-%m-%dT%H:%M:%S%z" autocapitalize="off">
-</p>
 <p>
 <label>Todoist API Token</label>
 <input id="todoist_token" type="password">
@@ -45,7 +38,7 @@
 </body>
 <script>
 "use strict;"
-var keys = ["ifttt_token", "ifttt_started", "ifttt_canceled", "ifttt_finished", "from_fmt", "to_fmt", "todoist_token"];
+var keys = ["ifttt_token", "ifttt_started", "ifttt_canceled", "ifttt_finished", "todoist_token"];
 function getOptions() {
   var options = {};
   keys.forEach(function(k, i, a) {

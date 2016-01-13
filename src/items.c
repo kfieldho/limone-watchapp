@@ -1,6 +1,7 @@
 #include <pebble.h>
 #include "track.h"
 #include "items.h"
+#include "message.h"
 
 static Window *s_window;
 static MenuLayer *s_menulayer;
@@ -21,7 +22,7 @@ static void add_item(Tuple *tuple_id, Tuple *tuple_name) {
     }
   }
   strncpy(items[count].name, tuple_name->value->cstring, MAX_TITLE_LENGTH - 1);
-  if (tuple_name->length > MAX_TITLE_LENGTH - 1) {
+  if (tuple_name->length >= MAX_TITLE_LENGTH - 1) {
     items[count].name[MAX_TITLE_LENGTH - 1] = '\0';
   }
   items[count].id = id;
@@ -36,10 +37,14 @@ static void fetch_items() {
     menu_layer_reload_data(s_menulayer);
   }
   DictionaryIterator *iter;
+  char token_buffer[TODOIST_TOKEN_LENGTH];
+  if (persist_read_string(TODOIST_TOKEN, token_buffer, TODOIST_TOKEN_LENGTH) == E_DOES_NOT_EXIST) {
+    return;
+  }
   if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
     return;
   }
-  if (dict_write_uint8(iter, FETCH_ITEMS, 1) != DICT_OK) {
+  if (dict_write_cstring(iter, TODOIST_TOKEN, token_buffer) != DICT_OK) {
     return;
   }
   app_message_outbox_send();
@@ -74,15 +79,6 @@ static void select_callback(struct MenuLayer *s_menulayer, MenuIndex *cell_index
   window_stack_pop(false);
 }
 
-static void received_handler(DictionaryIterator *iter, void *context) {
-  Tuple *tuple_id = dict_find(iter, ITEM_ID);
-  Tuple *tuple_name = dict_find(iter, ITEM_NAME);
-  if (tuple_id && tuple_name) {
-    add_item(tuple_id, tuple_name);
-    menu_layer_reload_data(s_menulayer);
-  }
-}
-
 static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
@@ -104,13 +100,24 @@ static void window_unload(Window *window) {
 }
 
 static void window_appear(Window *window) {
-  app_message_register_inbox_received(received_handler);
   fetch_items();
 }
 
 static void window_disappear(Window *window) {
   delete_items();
-  app_message_register_inbox_received(NULL);
+}
+
+void update_todoist(DictionaryIterator *iter) {
+  store_string(iter, TODOIST_TOKEN);
+}
+
+void update_items(DictionaryIterator *iter) {
+  Tuple *tuple_id = dict_find(iter, ITEM_ID);
+  Tuple *tuple_name = dict_find(iter, ITEM_NAME);
+  if (tuple_id && tuple_name) {
+    add_item(tuple_id, tuple_name);
+    menu_layer_reload_data(s_menulayer);
+  }
 }
 
 void create_item_window() {

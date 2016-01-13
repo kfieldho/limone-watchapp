@@ -9,14 +9,19 @@
 #define PERSIST_FROM 59
 
 #define TITLE 16
-#define FROM 17
-#define TO 18
+#define IFTTT_EVENT 17
+#define IFTTT_TOKEN 18
 
-#define STARTED 24
-#define CANCELED 25
-#define FINISHED 26
+#define IFTTT_STARTED 24
+#define IFTTT_CANCELED 25
+#define IFTTT_FINISHED 26
+
+#define IFTTT_TOKEN_LENGTH 23
+#define MAX_EVENT_LENGTH 16
 
 typedef enum { NOTHING, WORKING, BREAKING, PAUSING } State;
+
+void update_ifttt(DictionaryIterator *iter);
 
 void create_track_window();
 void destroy_track_window();

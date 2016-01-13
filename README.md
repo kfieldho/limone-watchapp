@@ -15,15 +15,13 @@ If you want to record your work or to notify your state working/breaking,
 Limone watchapp has feature to trigger [IFTTT Maker Channel](https://ifttt.com/maker).
 
 With proper configuration, this feature send a web request to [IFTTT Maker Channel](https://ifttt.com/maker) 
-with EventName (start/cancel/finish), Value1 task name,
-Value2 started time, Value3 finished or canceled time.
+with EventName (start/cancel/finish), Value1 task name and OccurredAt filled by IFTTT.
 
-|Ingredients|Example                        |Notes                                                           |
-|-----------|-------------------------------|----------------------------------------------------------------|
-|EventName  |task_started                   |eventname for started/canceled/finished depends on configuration|
-|Value1     |task                           |task name enable to select from Today's Todoist task            |
-|Value2     |2016-01-12T20:17:23+00:00-07:00|the time when task is started, enable to change format          |
-|Value3     |2016-01-12T20:17:23+00:00-07:00|the time when task is canceled/finished, enable to change format|
+|Ingredients|Example               |Notes                                                           |
+|-----------|----------------------|----------------------------------------------------------------|
+|EventName  |task_started          |eventname for started/canceled/finished depends on configuration|
+|Value1     |task                  |task name enable to select from Today's Todoist task            |
+|OccurredAt |May 5, 2013 at 11:30PM|Date and time event occurred filled by IFTTT                    |
 
 You can select task name from Today's tasks in [Todoist](https://todoist.com/)
 with Todoist API token in configuration.

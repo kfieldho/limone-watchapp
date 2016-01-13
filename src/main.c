@@ -1,14 +1,15 @@
 #include <pebble.h>
 #include "track.h"
 #include "items.h"
+#include "message.h"
 
 char title[MAX_TITLE_LENGTH];
 
 static void init(void) {
   strcpy(title, "Task");
-  app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
   create_track_window();
   create_item_window();
+  init_app_message();
 }
 
 static void deinit(void) {

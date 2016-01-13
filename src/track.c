@@ -1,6 +1,7 @@
 #include <pebble.h>
 #include "track.h"
 #include "items.h"
+#include "message.h"
 
 extern char title[MAX_TITLE_LENGTH];
 
@@ -14,8 +15,6 @@ static char s_buffer[32];
 
 static State s_state;
 static WakeupId s_wakeup_id;
-
-static time_t s_to, s_from;
 
 static void update_timer() {
   switch(s_state) {
@@ -42,30 +41,40 @@ static void update_timer() {
   }
 }
 
-static void post_ifttt(uint8_t trigger) {
+void update_ifttt(DictionaryIterator *iter) {
+  store_string(iter, IFTTT_TOKEN);
+  store_string(iter, IFTTT_STARTED);
+  store_string(iter, IFTTT_CANCELED);
+  store_string(iter, IFTTT_FINISHED);
+}
+
+static void post_ifttt(uint32_t event_code) {
   DictionaryIterator *iter;
+  char event_buffer[MAX_EVENT_LENGTH];
+  if (persist_read_string(event_code, event_buffer, MAX_EVENT_LENGTH) == E_DOES_NOT_EXIST) {
+    return;
+  }
+  char token_buffer[MAX_EVENT_LENGTH];
+  if (persist_read_string(IFTTT_TOKEN, token_buffer, IFTTT_TOKEN_LENGTH) == E_DOES_NOT_EXIST) {
+    return;
+  }
   if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
     return;
   }
-  if (dict_write_uint32(iter, FROM, s_from) != DICT_OK) {
+  if (dict_write_cstring(iter, IFTTT_EVENT, event_buffer) != DICT_OK) {
     return;
   }
-  if (dict_write_uint32(iter, TO, s_to) != DICT_OK) {
+  if (dict_write_cstring(iter, IFTTT_TOKEN, token_buffer) != DICT_OK) {
     return;
   }
   if (dict_write_cstring(iter, TITLE, title) != DICT_OK) {
-    return;
-  }
-  if (dict_write_uint8(iter, trigger, 1) != DICT_OK) {
     return;
   }
   app_message_outbox_send();
 }
 
 static void start_work() {
-  s_from = time(NULL);
-  persist_write_int(PERSIST_FROM, s_from);
-  time_t future_time = s_from + 1500;
+  time_t future_time = time(NULL) + 1500;
   s_wakeup_id = wakeup_schedule(future_time, WAKEUP_REASON, true);
   persist_write_int(PERSIST_WAKEUP_ID, s_wakeup_id);
 
@@ -84,7 +93,6 @@ static void stop_work() {
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
 
   persist_write_int(PERSIST_STATE, s_state);
-  s_to = time(NULL);
 }
 
 static void pause_work() {
@@ -148,7 +156,7 @@ static void selectclick_handler(ClickRecognizerRef recognizer, void *context) {
   switch(s_state) {
     case NOTHING:
       start_work();
-      post_ifttt(STARTED);
+      post_ifttt(IFTTT_STARTED);
       break;
     case WORKING:
       pause_work();
@@ -187,7 +195,7 @@ static void downclick_handler(ClickRecognizerRef recognizer, void *context) {
       start_break();
       wakeup_cancel(s_wakeup_id);
       stop_break();
-      post_ifttt(CANCELED);
+      post_ifttt(IFTTT_CANCELED);
       break;
     case PAUSING:
       resume_work();
@@ -213,7 +221,7 @@ static void wakeup_handler(WakeupId id, int32_t reason) {
     case WORKING:
       stop_work();
       vibes_short_pulse();
-      post_ifttt(FINISHED);
+      post_ifttt(IFTTT_FINISHED);
       start_break();
       break;
     case PAUSING:
@@ -323,9 +331,6 @@ static void window_appear(Window *window) {
   }
   if (persist_exists(PERSIST_TITLE)) {
     persist_read_string(PERSIST_TITLE, title, MAX_TITLE_LENGTH);
-  }
-  if (persist_exists(PERSIST_FROM)) {
-    s_from = persist_read_int(PERSIST_FROM);
   }
   if (launch_reason() == APP_LAUNCH_WAKEUP) {
     WakeupId id = 0;
