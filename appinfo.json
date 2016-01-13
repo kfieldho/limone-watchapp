@@ -11,15 +11,15 @@
     "watchface": false
   },
   "appKeys": {
-    "fetch_items": 0,
+    "todoist_token": 0,
     "item_id": 8,
     "item_name": 9,
     "title": 16,
-    "from": 17,
-    "to": 18,
-    "started": 24,
-    "canceled": 25,
-    "finished": 26
+    "ifttt_event": 17,
+    "ifttt_token": 18,
+    "ifttt_started": 24,
+    "ifttt_canceled": 25,
+    "ifttt_finished": 26
   },
   "resources": {
     "media": [
