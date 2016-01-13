@@ -6,10 +6,11 @@
 
 ## Description
 
-This is a simple pomodoro timer for Pebble,
-to notify 25 minutes work finished and after take 5 minutes break.
+A simple pomodoro timer for Pebble, to notify 25 minutes work finished and after take 5 minutes break.
 
 About Pomodoro, see [The Pomodoro Technique](http://pomodorotechnique.com/).
+
+Optionally has support to trigger IFTTT Maker channel and show today's tasks in Todoist.
 
 If you want to record your work or to notify your state working/breaking, 
 Limone watchapp has feature to trigger [IFTTT Maker Channel](https://ifttt.com/maker).
@@ -17,11 +18,11 @@ Limone watchapp has feature to trigger [IFTTT Maker Channel](https://ifttt.com/m
 With proper configuration, this feature send a web request to [IFTTT Maker Channel](https://ifttt.com/maker) 
 with EventName (start/cancel/finish), Value1 task name and OccurredAt filled by IFTTT.
 
-|Ingredients|Example               |Notes                                                           |
-|-----------|----------------------|----------------------------------------------------------------|
-|EventName  |task_started          |eventname for started/canceled/finished depends on configuration|
-|Value1     |task                  |task name enable to select from Today's Todoist task            |
-|OccurredAt |May 5, 2013 at 11:30PM|Date and time event occurred filled by IFTTT                    |
+|Ingredients|Example               |Notes                                                            |
+|-----------|----------------------|-----------------------------------------------------------------|
+|EventName  |task_started          |event name for started/canceled/finished depends on configuration|
+|Value1     |task                  |task name enable to select from Today's Todoist task             |
+|OccurredAt |May 5, 2013 at 11:30PM|Date and time event occurred, filled by IFTTT                    |
 
 You can select task name from Today's tasks in [Todoist](https://todoist.com/)
 with Todoist API token in configuration.
@@ -55,4 +56,5 @@ However, using these version are not recommended, install these versions at your
 
 ## License
 
-dedicated to [![CC0](http://i.creativecommons.org/p/zero/1.0/80x15.png "CC0")](https://creativecommons.org/publicdomain/zero/1.0/).
+Dedicated to [![CC0](http://i.creativecommons.org/p/zero/1.0/80x15.png "CC0")](https://creativecommons.org/publicdomain/zero/1.0/).
+No rights reserved.
