@@ -1,7 +1,5 @@
-#include <pebble.h>
-#include "track.h"
 #include "items.h"
-#include "message.h"
+#include "util.h"
 
 static Window *s_window;
 static MenuLayer *s_menulayer;

@@ -1,15 +1,7 @@
 #ifndef ITEMS_H_INCLUDED
 #define ITEMS_H_INCLUDED
-
-#define TODOIST_TOKEN 0
-
-#define ITEM_ID 8
-#define ITEM_NAME 9
-
-#define MAX_ITEMS_LENGTH 16
-#define MAX_TITLE_LENGTH 28
-
-#define TODOIST_TOKEN_LENGTH 41
+#include <pebble.h>
+#include "constant.h"
 
 typedef struct {
   uint32_t id;
