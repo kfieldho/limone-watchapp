@@ -49,15 +49,15 @@ void update_ifttt(DictionaryIterator *iter) {
 static void post_ifttt(uint32_t event_code) {
   DictionaryIterator *iter;
   char event_buffer[MAX_EVENT_LENGTH];
-  if (persist_read_string(event_code, event_buffer, MAX_EVENT_LENGTH) == E_DOES_NOT_EXIST) {
+  if (read_string(event_code, event_buffer, MAX_EVENT_LENGTH) == E_DOES_NOT_EXIST) {
     return;
   }
   char token_buffer[IFTTT_TOKEN_LENGTH];
-  if (persist_read_string(IFTTT_TOKEN, token_buffer, IFTTT_TOKEN_LENGTH) == E_DOES_NOT_EXIST) {
+  if (read_string(IFTTT_TOKEN, token_buffer, IFTTT_TOKEN_LENGTH) == E_DOES_NOT_EXIST) {
     return;
   }
   char title[MAX_TITLE_LENGTH];
-  if (persist_read_string(PERSIST_TITLE, title, MAX_TITLE_LENGTH) == E_DOES_NOT_EXIST) {
+  if (read_string(PERSIST_TITLE, title, MAX_TITLE_LENGTH) == E_DOES_NOT_EXIST) {
     strcpy(title, "task");
   }
   if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
