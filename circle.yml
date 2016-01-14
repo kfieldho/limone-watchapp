@@ -27,6 +27,7 @@ dependencies:
     - yes | pebble sdk install "${PEBBLESDK_VERSION}"
     - go get github.com/github/hub
     - pip install awscli
+    - sudo apt-get install -y jq
   override:
     - pip freeze
     - pebble --version
@@ -38,7 +39,8 @@ test:
 
 deployment:
   release:
-    tag: /[0-9]+\.[0-9]+/
+    branch: develop
     commands:
+      - version=$(jq -r .versionLabel appinfo.json)
       - aws s3 sync --acl public-read --storage-class REDUCED_REDUNDANCY assets/ s3://pebble.turbare.net/${CIRCLE_PROJECT_REPONAME}/
-      - hub release create -a "build/${CIRCLE_PROJECT_REPONAME}.pbw" -m "Release ${CIRCLE_TAG}" "${CIRCLE_TAG}"
+      - hub release create -a "build/${CIRCLE_PROJECT_REPONAME}.pbw" -m "Release ${version}-dev" "${version}-dev"
