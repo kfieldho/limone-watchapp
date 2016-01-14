@@ -57,7 +57,6 @@ Pebble.addEventListener('ready', function (e) {
 });
 
 Pebble.addEventListener('appmessage', function (e) {
-  console.log('Received message: ' + JSON.stringify(e.payload));
   if (e.payload.hasOwnProperty("todoist_token")) {
     fetch(e.payload.todoist_token);
   }
