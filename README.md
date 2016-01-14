@@ -10,10 +10,10 @@ A simple pomodoro timer for Pebble, to notify 25 minutes work finished and after
 
 About Pomodoro, see [The Pomodoro Technique](http://pomodorotechnique.com/).
 
-Optionally has support to trigger IFTTT Maker channel and show today's tasks in Todoist.
+Optionally supports to trigger IFTTT Maker channel and show today's tasks in Todoist.
 
-If you want to record your work or to notify your state working/breaking, 
-Limone watchapp has feature to trigger [IFTTT Maker Channel](https://ifttt.com/maker).
+With [IFTTT Maker Channel](https://ifttt.com/maker) trigger and some Web services,
+watchapp will automatically record of your work or notify your state, working or breaking, to someone.
 
 With proper configuration, this feature send a web request to [IFTTT Maker Channel](https://ifttt.com/maker) 
 with EventName (start/cancel/finish), Value1 task name and OccurredAt filled by IFTTT.
@@ -24,7 +24,7 @@ with EventName (start/cancel/finish), Value1 task name and OccurredAt filled by 
 |Value1     |task                  |task name enable to select from Today's Todoist task             |
 |OccurredAt |May 5, 2013 at 11:30PM|Date and time event occurred, filled by IFTTT                    |
 
-You can select task name from Today's tasks in [Todoist](https://todoist.com/)
+Value1 can be filled with task name from Today's tasks in [Todoist](https://todoist.com/)
 with Todoist API token in configuration.
 
 screenshots for work/break timer in Aplite, Basalt, Chalk are following.
