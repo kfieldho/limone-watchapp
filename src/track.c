@@ -3,8 +3,6 @@
 #include "items.h"
 #include "message.h"
 
-extern char title[MAX_TITLE_LENGTH];
-
 static Window *s_window;
 static Layer *s_layer;
 static ActionBarLayer *s_actionbar;
@@ -54,9 +52,13 @@ static void post_ifttt(uint32_t event_code) {
   if (persist_read_string(event_code, event_buffer, MAX_EVENT_LENGTH) == E_DOES_NOT_EXIST) {
     return;
   }
-  char token_buffer[MAX_EVENT_LENGTH];
+  char token_buffer[IFTTT_TOKEN_LENGTH];
   if (persist_read_string(IFTTT_TOKEN, token_buffer, IFTTT_TOKEN_LENGTH) == E_DOES_NOT_EXIST) {
     return;
+  }
+  char title[MAX_TITLE_LENGTH];
+  if (persist_read_string(PERSIST_TITLE, title, MAX_TITLE_LENGTH) == E_DOES_NOT_EXIST) {
+    strcpy(title, "task");
   }
   if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
     return;
@@ -328,9 +330,6 @@ static void window_appear(Window *window) {
     case BREAKING:
       action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, NULL);
       break;
-  }
-  if (persist_exists(PERSIST_TITLE)) {
-    persist_read_string(PERSIST_TITLE, title, MAX_TITLE_LENGTH);
   }
   if (launch_reason() == APP_LAUNCH_WAKEUP) {
     WakeupId id = 0;
