@@ -9,8 +9,6 @@ static MenuLayer *s_menulayer;
 static Item items[MAX_ITEMS_LENGTH];
 static int count = 0;
 
-extern char title[MAX_TITLE_LENGTH];
-
 static void add_item(Tuple *tuple_id, Tuple *tuple_name) {
   if (count == MAX_ITEMS_LENGTH) {
     return;
@@ -74,8 +72,7 @@ static void draw_row_handler(GContext *ctx, const Layer *cell_layer, MenuIndex *
 }
 
 static void select_callback(struct MenuLayer *s_menulayer, MenuIndex *cell_index, void *callback_context) {
-  strcpy(title, items[cell_index->row].name);
-  persist_write_string(PERSIST_TITLE, title);
+  persist_write_string(PERSIST_TITLE, items[cell_index->row].name);
   window_stack_pop(false);
 }
 
