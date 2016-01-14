@@ -58,7 +58,7 @@ static void post_ifttt(uint32_t event_code) {
     return;
   }
   char title[MAX_TITLE_LENGTH];
-  if (read_string(PERSIST_TITLE, title, MAX_TITLE_LENGTH) == E_DOES_NOT_EXIST) {
+  if (read_string(TITLE, title, MAX_TITLE_LENGTH) == E_DOES_NOT_EXIST) {
     strcpy(title, "task");
   }
   if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
