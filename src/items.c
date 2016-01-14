@@ -36,7 +36,8 @@ static void fetch_items() {
   }
   DictionaryIterator *iter;
   char token_buffer[TODOIST_TOKEN_LENGTH];
-  if (read_string(TODOIST_TOKEN, token_buffer, TODOIST_TOKEN_LENGTH) == E_DOES_NOT_EXIST) {
+  int written = read_string(TODOIST_TOKEN, token_buffer, TODOIST_TOKEN_LENGTH);
+  if (written == E_DOES_NOT_EXIST || written != TODOIST_TOKEN_LENGTH * sizeof(char)) {
     return;
   }
   if (app_message_outbox_begin(&iter) != APP_MSG_OK) {

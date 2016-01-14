@@ -53,7 +53,8 @@ static void post_ifttt(uint32_t event_code) {
     return;
   }
   char token_buffer[IFTTT_TOKEN_LENGTH];
-  if (read_string(IFTTT_TOKEN, token_buffer, IFTTT_TOKEN_LENGTH) == E_DOES_NOT_EXIST) {
+  int written = read_string(IFTTT_TOKEN, token_buffer, IFTTT_TOKEN_LENGTH);
+  if (written == E_DOES_NOT_EXIST || written != IFTTT_TOKEN_LENGTH * sizeof(char)) {
     return;
   }
   char title[MAX_TITLE_LENGTH];
