@@ -73,7 +73,7 @@ static void draw_row_handler(GContext *ctx, const Layer *cell_layer, MenuIndex *
 }
 
 static void select_callback(struct MenuLayer *s_menulayer, MenuIndex *cell_index, void *callback_context) {
-  persist_write_string(PERSIST_TITLE, items[cell_index->row].name);
+  persist_write_string(TITLE, items[cell_index->row].name);
   window_stack_pop(false);
 }
 
