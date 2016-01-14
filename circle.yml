@@ -12,7 +12,7 @@ dependencies:
     - "~/bin"
     - "~/pebble-sdk"
   pre:
-    - sudo apt-get install libsdl1.2debian libfdt1 libpixman-1-0
+    - sudo apt-get install -y libsdl1.2debian libfdt1 libpixman-1-0
     - |
       if [ ! -d "${HOME}/pebble-sdk" ]; then
         curl -Lo pebble-sdk.tar.bz2 "${PEBBLESDK_URL}" || exit $?
