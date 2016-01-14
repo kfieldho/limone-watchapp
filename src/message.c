@@ -2,7 +2,7 @@
 #include "track.h"
 #include "items.h"
 
-void received_handler(DictionaryIterator *iter, void *context) {
+static void received_handler(DictionaryIterator *iter, void *context) {
   update_ifttt(iter);
   update_items(iter);
   update_todoist(iter);

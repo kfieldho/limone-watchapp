@@ -93,8 +93,6 @@ static void stop_work() {
 
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_pause);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
-
-  persist_write_int(PERSIST_STATE, s_state);
 }
 
 static void pause_work() {
@@ -212,7 +210,6 @@ static void downclick_handler(ClickRecognizerRef recognizer, void *context) {
       stop_break();
       break;
   }
-  wakeup_cancel_all();
   update_timer();
 }
 
