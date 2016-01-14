@@ -41,6 +41,7 @@ deployment:
   release:
     branch: develop
     commands:
-      - version=$(jq -r .versionLabel appinfo.json)
       - aws s3 sync --acl public-read --storage-class REDUCED_REDUNDANCY assets/ s3://pebble.turbare.net/${CIRCLE_PROJECT_REPONAME}/
-      - hub release create -a "build/${CIRCLE_PROJECT_REPONAME}.pbw" -m "Release ${version}-dev" "${version}-dev"
+      - |
+        version=$(jq -r .versionLabel appinfo.json)
+        hub release create -a "build/${CIRCLE_PROJECT_REPONAME}.pbw" -m "Release ${version}-dev" "${version}-dev"
