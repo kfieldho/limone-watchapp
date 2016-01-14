@@ -8,7 +8,8 @@
 
 A simple pomodoro timer for Pebble, to notify 25 minutes work finished and after take 5 minutes break.
 
-About Pomodoro, see [The Pomodoro Technique](http://pomodorotechnique.com/).
+About pomodoro, see [The Pomodoro Technique](http://pomodorotechnique.com/) or 
+[an article on Wikipedia](https://en.wikipedia.org/wiki/Pomodoro_Technique).
 
 Optionally supports to trigger IFTTT Maker channel and show today's tasks in Todoist.
 
@@ -16,12 +17,12 @@ With [IFTTT Maker Channel](https://ifttt.com/maker) trigger and some Web service
 watchapp will automatically record of your work or notify your state, working or breaking, to someone.
 
 With proper configuration, this feature send a web request to [IFTTT Maker Channel](https://ifttt.com/maker) 
-with EventName (start/cancel/finish), Value1 task name and OccurredAt filled by IFTTT.
+`EventName` (started/canceled/finished), `Value1` task name and `OccurredAt` filled by IFTTT.
 
 |Ingredients|Example               |Notes                                                            |
 |-----------|----------------------|-----------------------------------------------------------------|
 |EventName  |task_started          |event name for started/canceled/finished depends on configuration|
-|Value1     |task                  |task name enable to select from Today's Todoist task             |
+|Value1     |task                  |task name, able to select from Today's Todoist task              |
 |OccurredAt |May 5, 2013 at 11:30PM|Date and time event occurred, filled by IFTTT                    |
 
 Value1 can be filled with task name from Today's tasks in [Todoist](https://todoist.com/)
