@@ -15,6 +15,14 @@ function post(payload) {
   req.open('POST', ifttt_endpoint + payload.ifttt_event + '/with/key/' + payload.ifttt_token, true);
   req.setRequestHeader("Content-Type", "application/json");
   var data = {"value1": payload.title};
+  req.onload = function () {
+    if (req.readyState === 4 && req.status === 200) {
+      console.log(req.responseText);
+    }
+    else {
+      console.log("fetch failed with " + req.status + ": " + req.statusText);
+    }
+  };
   req.send(JSON.stringify(data));
 }
 
