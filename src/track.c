@@ -16,7 +16,8 @@ static WakeupId s_wakeup_id;
 static void update_timer() {
   switch(s_state) {
     case NOTHING:
-      text_layer_set_text(s_time_layer, "25:00");
+      snprintf(s_buffer, sizeof(s_buffer), "%02d:%02d", WORKTIME_SECONDS / 60, WORKTIME_SECONDS % 60);
+      text_layer_set_text(s_time_layer, s_buffer);
       return;
     case PAUSING:
       break;
@@ -76,7 +77,7 @@ static void post_ifttt(uint32_t event_code) {
 }
 
 static void start_work() {
-  time_t future_time = time(NULL) + 1500;
+  time_t future_time = time(NULL) + WORKTIME_SECONDS;
   s_wakeup_id = wakeup_schedule(future_time, WAKEUP_REASON, true);
   persist_write_int(PERSIST_WAKEUP_ID, s_wakeup_id);
 
@@ -130,7 +131,7 @@ static void resume_work() {
 }
 
 static void start_break() {
-  time_t future_time = time(NULL) + 300;
+  time_t future_time = time(NULL) + BREAKTIME_SECONDS;
   s_wakeup_id = wakeup_schedule(future_time, WAKEUP_REASON, true);
   persist_write_int(PERSIST_WAKEUP_ID, s_wakeup_id);
 
@@ -266,7 +267,7 @@ static void update_display(Layer *layer, GContext *ctx) {
       color = PBL_IF_COLOR_ELSE(GColorYellow, GColorLightGray);
       break;
   }
-  int angle = TRIG_MAX_ANGLE - remaining * (TRIG_MAX_ANGLE / ((s_state == BREAKING)? 300: 1500));
+  int angle = TRIG_MAX_ANGLE - remaining * (TRIG_MAX_ANGLE / ((s_state == BREAKING)? BREAKTIME_SECONDS : WORKTIME_SECONDS));
   GRect rect = layer_get_bounds(layer);
   graphics_context_set_fill_color(ctx, color);
   graphics_fill_radial(ctx, rect, GOvalScaleModeFitCircle, 90, angle, TRIG_MAX_ANGLE);
