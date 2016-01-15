@@ -81,6 +81,9 @@ Pebble.addEventListener("showConfiguration", function() {
 
 Pebble.addEventListener("webviewclosed", function(e) {
   console.log("configuration closed");
-  options = JSON.parse(decodeURIComponent(e.response));
+  var decoded = decodeURIComponent(e.response);
+  if (decoded) {
+    options = JSON.parse(decodeURIComponent(e.response));
+  }
   Pebble.sendAppMessage(options);
 });
