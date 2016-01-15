@@ -6,6 +6,7 @@
 typedef enum { NOTHING, WORKING, BREAKING, PAUSING } State;
 
 void update_ifttt(DictionaryIterator *iter);
+void post_ifttt(uint32_t event_code);
 
 void create_track_window();
 void destroy_track_window();

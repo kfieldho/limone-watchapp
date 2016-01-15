@@ -22,6 +22,9 @@
 #define IFTTT_STARTED 24
 #define IFTTT_CANCELED 25
 #define IFTTT_FINISHED 26
+#define IFTTT_POSTPONED 27
+
+#define JS_READY 32
 
 
 /* lengths for string */

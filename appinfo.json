@@ -19,7 +19,8 @@
     "ifttt_token": 18,
     "ifttt_started": 24,
     "ifttt_canceled": 25,
-    "ifttt_finished": 26
+    "ifttt_finished": 26,
+    "js_ready": 32
   },
   "resources": {
     "media": [

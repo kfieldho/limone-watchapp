@@ -62,6 +62,7 @@ function fetch(todoist_token) {
 
 Pebble.addEventListener('ready', function (e) {
   console.log('connected! ' + e.ready);
+  Pebble.sendAppMessage({'js_ready': true});
 });
 
 Pebble.addEventListener('appmessage', function (e) {

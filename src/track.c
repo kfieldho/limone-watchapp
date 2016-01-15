@@ -1,6 +1,7 @@
 #include "track.h"
 #include "items.h"
 #include "util.h"
+#include "message.h"
 
 static Window *s_window;
 static Layer *s_layer;
@@ -46,34 +47,44 @@ void update_ifttt(DictionaryIterator *iter) {
   store_string(iter, IFTTT_FINISHED);
 }
 
-static void post_ifttt(uint32_t event_code) {
-  DictionaryIterator *iter;
-  char event_buffer[MAX_EVENT_LENGTH];
-  if (read_string(event_code, event_buffer, MAX_EVENT_LENGTH) == E_DOES_NOT_EXIST) {
-    return;
+void post_ifttt(uint32_t event_code) {
+  if (js_ready()) {
+    DictionaryIterator *iter;
+    char event_buffer[MAX_EVENT_LENGTH];
+    if (read_string(event_code, event_buffer, MAX_EVENT_LENGTH) == E_DOES_NOT_EXIST) {
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "event %ld does not exists", event_code);
+      return;
+    }
+    char token_buffer[IFTTT_TOKEN_LENGTH];
+    int written = read_string(IFTTT_TOKEN, token_buffer, IFTTT_TOKEN_LENGTH);
+    if (written == E_DOES_NOT_EXIST || written != IFTTT_TOKEN_LENGTH * sizeof(char)) {
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "token does not exists");
+      return;
+    }
+    char title[MAX_TITLE_LENGTH];
+    if (read_string(TITLE, title, MAX_TITLE_LENGTH) == E_DOES_NOT_EXIST) {
+      strcpy(title, "task");
+    }
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s", event_buffer);
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s", token_buffer);
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s", title);
+    if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
+      return;
+    }
+    if (dict_write_cstring(iter, IFTTT_EVENT, event_buffer) != DICT_OK) {
+      return;
+    }
+    if (dict_write_cstring(iter, IFTTT_TOKEN, token_buffer) != DICT_OK) {
+      return;
+    }
+    if (dict_write_cstring(iter, TITLE, title) != DICT_OK) {
+      return;
+    }
+    app_message_outbox_send();
   }
-  char token_buffer[IFTTT_TOKEN_LENGTH];
-  int written = read_string(IFTTT_TOKEN, token_buffer, IFTTT_TOKEN_LENGTH);
-  if (written == E_DOES_NOT_EXIST || written != IFTTT_TOKEN_LENGTH * sizeof(char)) {
-    return;
+  else {
+    persist_write_int(IFTTT_POSTPONED, event_code);
   }
-  char title[MAX_TITLE_LENGTH];
-  if (read_string(TITLE, title, MAX_TITLE_LENGTH) == E_DOES_NOT_EXIST) {
-    strcpy(title, "task");
-  }
-  if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
-    return;
-  }
-  if (dict_write_cstring(iter, IFTTT_EVENT, event_buffer) != DICT_OK) {
-    return;
-  }
-  if (dict_write_cstring(iter, IFTTT_TOKEN, token_buffer) != DICT_OK) {
-    return;
-  }
-  if (dict_write_cstring(iter, TITLE, title) != DICT_OK) {
-    return;
-  }
-  app_message_outbox_send();
 }
 
 static void start_work() {
