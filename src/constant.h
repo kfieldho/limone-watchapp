@@ -32,7 +32,11 @@
 #define MAX_EVENT_LENGTH 32
 
 #define MAX_ITEMS_LENGTH 16
+#ifdef PBL_PLATFORM_APLITE
+#define MAX_TITLE_LENGTH 12
+#else
 #define MAX_TITLE_LENGTH 28
+#endif
 
 #define TODOIST_TOKEN_LENGTH 41
 
