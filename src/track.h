@@ -1,12 +1,12 @@
 #ifndef TRACK_H_INCLUDED
 #define TRACK_H_INCLUDED
-
-#define WAKEUP_REASON 0
-#define PERSIST_WAKEUP_ID 41
-#define PERSIST_REMAINING 43
-#define PERSIST_STATE 47
+#include <pebble.h>
+#include "constant.h"
 
 typedef enum { NOTHING, WORKING, BREAKING, PAUSING } State;
+
+void update_ifttt(DictionaryIterator *iter);
+void post_ifttt(uint32_t event_code);
 
 void create_track_window();
 void destroy_track_window();

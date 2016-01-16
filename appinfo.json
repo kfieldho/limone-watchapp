@@ -1,16 +1,26 @@
 {
   "uuid": "a62f6801-64e0-4ecc-8e7c-fa4f1b17d10e",
   "shortName": "limone",
-  "longName": "Limone Timer",
+  "longName": "Limone",
   "companyName": "Akihiro Uchida",
-  "versionLabel": "0.1",
+  "versionLabel": "0.2",
   "sdkVersion": "3",
   "targetPlatforms": ["aplite", "basalt", "chalk"],
+  "capabilities": ["configurable"],
   "watchapp": {
     "watchface": false
   },
   "appKeys": {
-    "dummy": 0
+    "todoist_token": 0,
+    "item_id": 8,
+    "item_name": 9,
+    "title": 16,
+    "ifttt_event": 17,
+    "ifttt_token": 18,
+    "ifttt_started": 24,
+    "ifttt_canceled": 25,
+    "ifttt_finished": 26,
+    "js_ready": 32
   },
   "resources": {
     "media": [
@@ -28,6 +38,11 @@
         "type": "bitmap",
         "name": "IMAGE_ACTION_ICON_PAUSE",
         "file": "images/action_icon_pause.png"
+      },
+      {
+        "type": "bitmap",
+        "name": "IMAGE_ACTION_ICON_MENU",
+        "file": "images/action_icon_menu.png"
       }
     ]
   }
