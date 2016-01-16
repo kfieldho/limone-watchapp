@@ -157,7 +157,9 @@ static void stop_break() {
   persist_delete(PERSIST_WAKEUP_ID);
 
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_start);
-  action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
+  if(persist_exists(TODOIST_TOKEN)) {
+    action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
+  }
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, NULL);
 
   s_state = NOTHING;
@@ -183,6 +185,9 @@ static void selectclick_handler(ClickRecognizerRef recognizer, void *context) {
 }
 
 static void upclick_handler(ClickRecognizerRef recognizer, void *context) {
+  if(!persist_exists(TODOIST_TOKEN)) {
+    return;
+  }
   switch(s_state) {
     case NOTHING:
       show_items();
@@ -297,7 +302,9 @@ static void window_load(Window *window) {
   s_actionbar = action_bar_layer_create();
   action_bar_layer_set_background_color(s_actionbar, GColorClear);
   action_bar_layer_add_to_window(s_actionbar, window);
-  action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
+  if(persist_exists(TODOIST_TOKEN)) {
+    action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
+  }
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, s_icon_stop);
   action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, s_icon_start);
   action_bar_layer_set_click_config_provider(s_actionbar, config_provider);
@@ -321,7 +328,9 @@ static void window_appear(Window *window) {
   int remaining, minutes, seconds;
   switch(s_state) {
     case NOTHING:
-      action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
+      if(persist_exists(TODOIST_TOKEN)) {
+        action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, s_icon_menu);
+      }
       action_bar_layer_set_icon(s_actionbar, BUTTON_ID_DOWN, NULL);
       break;
     case WORKING:
@@ -334,8 +343,10 @@ static void window_appear(Window *window) {
       seconds = remaining % 60;
       snprintf(s_buffer, sizeof(s_buffer), "%02d:%02d", minutes, seconds);
       text_layer_set_text(s_time_layer, s_buffer);
+      action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, NULL);
       break;
     case BREAKING:
+      action_bar_layer_set_icon(s_actionbar, BUTTON_ID_UP, NULL);
       action_bar_layer_set_icon(s_actionbar, BUTTON_ID_SELECT, NULL);
       break;
   }
