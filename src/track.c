@@ -190,7 +190,6 @@ static void upclick_handler(ClickRecognizerRef recognizer, void *context) {
     case WORKING:
       break;
     case PAUSING:
-      show_items();
       break;
     case BREAKING:
       break;
