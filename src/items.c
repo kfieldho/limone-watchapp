@@ -56,18 +56,19 @@ static void delete_items() {
 }
 
 static uint16_t get_count_callback(struct MenuLayer *menulayer, uint16_t section_index, void *callback_context) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "count_callback called");
   return count;
 }
 
 #ifdef PBL_ROUND
 static int16_t get_cell_height_callback(MenuLayer *s_menulayer, MenuIndex *cell_index, void *callback_context) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "get cell height called");
   return 60;
 }
 #endif
 
 static void draw_row_handler(GContext *ctx, const Layer *cell_layer, MenuIndex *cell_index, void *callback_context) {
-  char* name = items[cell_index->row].name;
-  menu_cell_basic_draw(ctx, cell_layer, name, NULL, NULL);
+  menu_cell_basic_draw(ctx, cell_layer, items[cell_index->row].name, NULL, NULL);
 }
 
 static void select_callback(struct MenuLayer *s_menulayer, MenuIndex *cell_index, void *callback_context) {
