@@ -52,22 +52,17 @@ void post_ifttt(uint32_t event_code) {
     DictionaryIterator *iter;
     char event_buffer[MAX_EVENT_LENGTH];
     if (read_string(event_code, event_buffer, MAX_EVENT_LENGTH) == E_DOES_NOT_EXIST) {
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "event %ld does not exists", event_code);
       return;
     }
     char token_buffer[IFTTT_TOKEN_LENGTH];
     int written = read_string(IFTTT_TOKEN, token_buffer, IFTTT_TOKEN_LENGTH);
     if (written == E_DOES_NOT_EXIST || written != IFTTT_TOKEN_LENGTH * sizeof(char)) {
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "token does not exists");
       return;
     }
     char title[MAX_TITLE_LENGTH];
     if (read_string(TITLE, title, MAX_TITLE_LENGTH) == E_DOES_NOT_EXIST) {
       strcpy(title, "task");
     }
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s", event_buffer);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s", token_buffer);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s", title);
     if (app_message_outbox_begin(&iter) != APP_MSG_OK) {
       return;
     }
