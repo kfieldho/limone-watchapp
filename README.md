@@ -1,8 +1,8 @@
 # Limone watchapp
 
-![Version](https://img.shields.io/github/tag/uchida/limone-watchapp.svg)
-[![License](https://img.shields.io/github/license/uchida/limone-watchapp.svg)](https://tldrlegal.com/license/creative-commons-cc0-1.0-universal)
-[![CircleCI](https://img.shields.io/circleci/project/uchida/limone-watchapp.svg)](https://circleci.com/gh/uchida/limone-watchapp)
+![Version](https://img.shields.io/github/tag/uchida/limone-watchapp.svg?maxAge=2592000)
+[![License](https://img.shields.io/github/license/uchida/limone-watchapp.svg?maxAge=2592000)](https://tldrlegal.com/license/creative-commons-cc0-1.0-universal)
+[![CircleCI](https://img.shields.io/circleci/project/uchida/limone-watchapp.svg?maxAge=2592000)](https://circleci.com/gh/uchida/limone-watchapp)
 
 ## Description
 
