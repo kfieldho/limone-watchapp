@@ -1,0 +1,68 @@
+{
+  "version": "0.4.0",
+  "author": "Akihiro Uchida",
+  "private": true,
+  "dependencies": {
+    "pebble-clay": "^1.0.4"
+  },
+  "keywords": [
+    "pebble-app"
+  ],
+  "pebble": {
+    "sdkVersion": "3",
+    "resources": {
+      "media": [
+        {
+          "type": "bitmap",
+          "name": "IMAGE_ACTION_ICON_START",
+          "file": "images/action_icon_start.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_ACTION_ICON_STOP",
+          "file": "images/action_icon_stop.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_ACTION_ICON_PAUSE",
+          "file": "images/action_icon_pause.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_ACTION_ICON_MENU",
+          "file": "images/action_icon_menu.png"
+        }
+      ]
+    },
+    "projectType": "native",
+    "uuid": "a62f6801-64e0-4ecc-8e7c-fa4f1b17d10e",
+    "messageKeys": {
+      "ifttt_event": 17,
+      "ifttt_token": 18,
+      "title": 16,
+      "item_name": 9,
+      "ifttt_finished": 26,
+      "ifttt_started": 24,
+      "ifttt_canceled": 25,
+      "todoist_token": 0,
+      "item_id": 8,
+      "js_ready": 32
+    },
+    "enableMultiJS": false,
+    "displayName": "Limone",
+    "watchapp": {
+      "onlyShownOnCommunication": false,
+      "hiddenApp": false,
+      "watchface": false
+    },
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk"
+    ],
+    "capabilities": [
+      "configurable"
+    ]
+  },
+  "name": "limone"
+}
